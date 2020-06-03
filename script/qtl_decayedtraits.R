@@ -5,22 +5,11 @@ library(qtl)
 ### download the Rqtl code from the tutorial.
 url.show("http://www.rqtl.org/rqtltour.R")
 
-##############################################################
-# R code for "A brief tour of R/qtl"
-#
-# Karl W Broman, broman@wisc.edu
-# University of Wisconsin Madison
-#
-# http://www.rqtl.org
-#
-# 21 March 2012
-##############################################################
-
 ############################################################
 # Example 1: Hypertension
 ############################################################
 #load data
-qtl <- read.cross("csv", dir = "/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/input/", file = "genotype_linkagemap_mod.csv", alleles=c("A","B"))
+qtl <- read.cross("csv", dir = "/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/input/", file = "genotype_linkagemap_mod.csv", alleles=c("A","B"),na.string="na")
 qtl <- jittermap(qtl)
 summary(qtl) 
 
@@ -30,6 +19,14 @@ nphe(qtl)
 nchr(qtl)
 totmar(qtl)
 nmar(qtl)
+
+# remove duplicate markers
+print(dup <- findDupMarkers(qtl, exact.only=FALSE))
+qtl <- drop.markers(qtl, unlist(dup))
+
+# should report no problems
+qtl <- est.rf(qtl)
+checkAlleles(qtl, threshold=5)
 
 #plot the summary
 plot(qtl)
@@ -55,13 +52,13 @@ totmar(qtl)
 #estimating recombination fractions between all pairs of markers and plot them.
 qtl <- est.rf(qtl)
 plotRF(qtl)
-plotRF(qtl, chr=c(1,4))
+plotRF(qtl, chr=c(12))
 
 plotRF(qtl, chr=6)
 plotMissing(qtl, chr=6)
 
 #Re-estimate the genetic map (keeping the order of markers fixed), and plot the original map against the newly estimated one.
-newmap <- est.map(qtl, error.prob=0.01)
+newmap <- est.map(qtl, error.prob=0.001)
 plotMap(qtl, newmap)
 
 #If one wished to replace the genetic map with the estimated one, it could be done as follows:
@@ -69,7 +66,7 @@ qtl <- replace.map(qtl, newmap)
 ##error message here:Error in as.data.frame.default(x[[i]], optional = TRUE) : cannot coerce class ""A"" to a data.frame
 
 #identification of genotyping errors
-qtl <- calc.errorlod(qtl, error.prob=0.01)
+qtl <- calc.errorlod(qtl, error.prob=0.001)
 
 #genotyping value <4 can be ignored.
 top.errorlod(qtl)
@@ -86,73 +83,86 @@ plotInfo(qtl, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), method="variance")
 
 #The function calc.genoprob calculates QTL genotype probabilities, conditional on the available marker data
 #The argument step indicates the step size (in cM) at which the probabilities are calculated, and determines the step size at which later LOD scores are calculated.
-qtl <- calc.genoprob(qtl, step=1, error.prob=0.01)
+qtl <- calc.genoprob(qtl, step=1, error.prob=0.001)
 
-# use the function scanone to perform a single-QTL genome scan with a normal model.
-out.em <- scanone(qtl)
-out.hk <- scanone(qtl, method="hk")
+########################################
+########################################single-QTL genome scan
+########################################
+# use the function scanone to perform a single-QTL genome scan with a binomial model.
+out.em <- scanone(qtl,method="em",model='binary')
+out.hk <- scanone(qtl, method="hk",model='binary')
 
 #We may also use the multiple imputation method of Sen and Churchill (2001). The n.draws indicates the number of imputations to perform. 
 #step indicates the step size (in cM) in which the probability is calculated.
 
-qtl <- sim.geno(qtl, step=0.5, n.draws=1000, error.prob=0.01)
-out.imp <- scanone(qtl, method="imp")
+qtl <- sim.geno(qtl, step=0.2, n.draws=100, error.prob=0.001)
+out.imp <- scanone(qtl, method="imp",model='binary')
 
 #thefunctionsummary.scanonedisplaysthemaximumLODscoreon each chromosome for which the LOD exceeds a specified threshold
-summary(out.em) #for some i-donot-understand reason, this values changes each time i ran the code
+summary(out.em,pvalues=TRUE) #for some i-donot-understand reason, this values changes each time i ran the code
 summary(out.em, threshold=3)
+#chr pos  lod
+c12.loc9  12   9 39.6
+
 summary(out.hk)
 summary(out.hk, threshold=2)
-summary(out.imp)
-summary(out.imp, threshold=3)
+# chr pos lod
+c12.loc10  12  10  39
 
-max(out.em)
-max(out.hk)
-max(out.imp)
+summary(out.imp)
+summary(out.imp, threshold=3, alpha=0.05,pvalues = TRUE)
+# chr pos  lod
+c12.loc9  12   9 39.6
+
+max(out.em) #c12.loc9  12   9 39.6
+max(out.hk) #c12.loc10  12  10  39
+max(out.imp) #c12.loc9  12   9 39.6
 
 #plot.scanone can plot up to three genome scans at once, provided that they conform appropriately. Alternatively, one may use the argument add.
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_em.pdf", width=8, height=8)
-plot(out.em, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),ylim=c(0,20))
+plot(out.em, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),ylim=c(0,42))
 abline(h = 3,col="blue", lwd=1, lty=2)
 dev.off()
 
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_hk.pdf", width=8, height=8)
-plot(out.em, out.hk, out.imp, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),ylim=c(0,50))
-plot(out.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue", add=TRUE,ylim=c(0,50))
+plot(out.em, out.hk, out.imp, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),ylim=c(0,42))
+plot(out.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue", add=TRUE,ylim=c(0,42))
 abline(h = 3,col="blue", lwd=1, lty=2)
 dev.off()
 
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_imp.pdf", width=8, height=8)
-plot(out.em, out.hk, out.imp, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),ylim=c(0,50))
+plot(out.em, out.hk, out.imp, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),ylim=c(0,42))
 plot(out.imp, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),ylim=c(0,50),col="red", add=TRUE)
 abline(h = 3,col="blue", lwd=1, lty=2)
 dev.off()
 
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_imp.pdf", width=8, height=8)
-plot(out.em, out.hk, out.imp, chr=c(1,11,12),ylim=c(0,50))
+plot(out.em, out.hk, out.imp, chr=c(1,11,12),ylim=c(0,42))
 plot(out.imp, chr=c(1,11,12),ylim=c(0,50),col="red", add=TRUE)
 abline(h = 3,col="blue", lwd=1, lty=2)
 dev.off()
 
 #Thefunctionscanonemayalsobeusedtoperformapermutationtesttogetagenome-wideLODsignificancethreshold.
-operm.hk <- scanone(qtl, method="hk", n.perm=10000)
-operm.imp <- scanone(qtl, method="imp", n.perm=10000)
+operm.hk <- scanone(qtl, method="hk", n.perm=10000,pheno.col=1, model ="binary")
+operm.hk <- scantwo(qtl, method="hk", n.perm=10, pheno.col=1, model ="binary")
+operm.imp <- scanone(qtl, method="imp", n.perm=3000)
 
 summary(operm.hk, alpha=0.05)
 summary(operm.imp, alpha=0.05)
 ##
 LOD thresholds (10000 permutations)
 lod
-5% 2.49
+5%  2.42
+10% 2.12
 ##
 
-summary(out.hk, perms=operm.hk, alpha=0.05, pvalues=TRUE)
+###the permutation results may also be used in teh summary.scanone function to calculate LOD thresholds and genome-scan-adjusted p values.
+summary(out.hk, perms=operm.hk, alpha=0.05, pvalues=TRUE,format = "allpheno")
+m1lg <- 12
+m1cm <- 10
 ###
-chr pos  lod pval
-c12.loc8  12   8 50.4    0
-###
-chr pos  lod pval
-c12.loc5  12   5 50.3    0
+chr pos lod pval
+c12.loc10  12  10  39    0
 ###
 
 summary(out.imp, perms=operm.imp, alpha=0.05, pvalues=TRUE)
@@ -214,205 +224,21 @@ summary(out.fitqtl)
 ls()
 rm(list=ls())
 
-############################################################
-# Example 2: Genetic mapping
-############################################################
-data(badorder)
-summary(badorder)
-plot(badorder)
 
-badorder <- est.rf(badorder)
-plotRF(badorder)
+########################################
+########################################two-QTL genome scan
+########################################
+qtl <- calc.genoprob(qtl, step=1, error.prob=0.001)
+qtl <-sim.geno(qtl,step=11,n.draws=100,err=0.001)
 
-plotRF(badorder, chr=1)
+out2.em <- scantwo(qtl,method="em",model='binary')
+out2.hk <- scanone(qtl, method="hk",model='binary')
+out2.imp <- scanone(qtl, method="imp",model='binary')
 
-newmap <- est.map(badorder, verbose=TRUE)
-plotMap(badorder, newmap)
-
-plotRF(badorder, chr=2:3)
-
-pull.map(badorder, chr=2)
-pull.map(badorder, chr=3)
-
-badorder <- movemarker(badorder, "D2M937", 3, 48)
-badorder <- movemarker(badorder, "D3M160", 2, 28.8)
-
-plotRF(badorder, chr=2:3)
-
-rip1 <- ripple(badorder, chr=1, window=6)
-summary(rip1)
-
-rip2 <- ripple(badorder, chr=1, window=3, err=0.01, method="likelihood")
-summary(rip2)
-
-badorder.rev <- switch.order(badorder, 1, rip1[2,])
-rip1r <- ripple(badorder.rev, chr=1, window=6)
-summary(rip1r)
-
-badorder.rev <- switch.order(badorder.rev, 1, rip1r[2,])
-rip2r <- ripple(badorder.rev, chr=1, window=3, err=0.01)
-summary(rip2r)
-
-badorder.rev <- est.rf(badorder.rev)
-plotRF(badorder.rev, 1)
-
-############################################################
-# Example 3: Listeria susceptibility
-############################################################
-data(listeria)
-summary(listeria)
-plot(listeria)
-plotMissing(listeria)
-
-listeria$pheno$logSurv <- log(listeria$pheno[,1])
-plot(listeria)
-
-listeria <- est.rf(listeria)
-plotRF(listeria)
-plotRF(listeria, chr=c(5,13))
-
-newmap <- est.map(listeria, error.prob=0.01)
-plotMap(listeria, newmap)
-listeria <- replace.map(listeria, newmap)
-
-listeria <- calc.errorlod(listeria, error.prob=0.01)
-top.errorlod(listeria)
-top.errorlod(listeria, cutoff=3.5)
-plotGeno(listeria, chr=13, ind=61:70, cutoff=3.5)
-
-listeria <- calc.genoprob(listeria, step=2)
-out.2p <- scanone(listeria, pheno.col=3, model="2part", upper=TRUE)
-
-summary(out.2p)
-summary(out.2p, threshold=4.5)
-
-summary(out.2p, format="allpeaks", threshold=3)
-summary(out.2p, format="allpeaks", threshold=c(4.5,3,3))
-
-plot(out.2p)
-plot(out.2p, lodcolumn=2)
-plot(out.2p, lodcolumn=1:3, chr=c(1,5,13,15))
-
-operm.2p <- scanone(listeria, model="2part", pheno.col=3,
-                    upper=TRUE, n.perm=25)
-summary(operm.2p, alpha=0.05)
-
-summary(out.2p, format="allpeaks", perms=operm.2p,
-        alpha=0.05, pvalues=TRUE)
-
-y <- listeria$pheno$logSurv
-my <- max(y, na.rm=TRUE)
-z <- as.numeric(y==my)
-y[y==my] <- NA
-listeria$pheno$logSurv2 <- y
-listeria$pheno$binary <- z
-plot(listeria)
-
-out.mu <- scanone(listeria, pheno.col=4)
-plot(out.mu, out.2p, lodcolumn=c(1,3), chr=c(1,5,13,15), col=c("blue","red"))
-
-out.p <- scanone(listeria, pheno.col=5, model="binary")
-plot(out.p, out.2p, lodcolumn=c(1,2), chr=c(1,5,13,15), col=c("blue","red"))
-
-out.p.alt <- scanone(listeria, pheno.col=as.numeric(listeria$pheno$T264==264),
-                     model="binary")
-
-out.np1 <- scanone(listeria, model="np", ties.random=TRUE)
-out.np2 <- scanone(listeria, model="np", ties.random=FALSE)
-
-plot(out.np1, out.np2, col=c("blue","red"))
-plot(out.2p, out.np1, out.np2, chr=c(1,5,13,15))
-
-############################################################
-# Example 4: Covariates in QTL mapping
-############################################################
-data(fake.bc)
-summary(fake.bc)
-plot(fake.bc)
-
-fake.bc <- calc.genoprob(fake.bc, step=2.5)
-out.nocovar <- scanone(fake.bc, pheno.col=1:2)
-
-sex <- fake.bc$pheno$sex
-out.acovar <- scanone(fake.bc, pheno.col=1:2, addcovar=sex)
-
-summary(out.nocovar, threshold=3, format="allpeaks")
-summary(out.acovar, threshold=3, format="allpeaks")
-
-plot(out.nocovar, out.acovar, chr=c(2, 5))
-plot(out.nocovar, out.acovar, chr=c(2, 5), lodcolumn=2)
-
-out.icovar <- scanone(fake.bc, pheno.col=1:2, addcovar=sex, intcovar=sex)
-
-summary(out.icovar, threshold=3, format="allpeaks")
-
-plot(out.acovar, out.icovar, chr=c(2,5), col=c("blue", "red"))
-plot(out.acovar, out.icovar, chr=c(2,5), lodcolumn=2,
-     col=c("blue", "red"))
-
-out.sexint <- out.icovar - out.acovar
-plot(out.sexint, lodcolumn=1:2, chr=c(2,5), col=c("green", "purple"))
-
-seed <- ceiling(runif(1, 0, 10^8))
-set.seed(seed)
-operm.acovar <- scanone(fake.bc, pheno.col=1:2, addcovar=sex,
-                        method="hk", n.perm=100)
-set.seed(seed)
-operm.icovar <- scanone(fake.bc, pheno.col=1:2, addcovar=sex,
-                        intcovar=sex, method="hk", n.perm=100)
-
-operm.sexint <- operm.icovar - operm.acovar
-
-summary(operm.sexint, alpha=c(0.05, 0.20))
-
-summary(out.sexint, perms=operm.sexint, alpha=0.1,
-        format="allpeaks", pvalues=TRUE)
 
 ############################################################
 # Example 5: Multiple QTL mapping
-############################################################
-rm(list=ls())
-data(hyper)
-
-hyper <- sim.geno(hyper, step=2.5, n.draws=16, err=0.01)
-
-out1 <- scanone(hyper, method="imp")
-plot(out1)
-
-max(out1)
-
-find.marker(hyper, 4, 29.5)
-
-g <- pull.geno(hyper)[,"D4Mit164"]
-mean(is.na(g))
-
-g <- pull.geno(fill.geno(hyper))[,"D4Mit164"]
-
-out1.c4 <- scanone(hyper, method="imp", addcovar=g)
-
-plot(out1, out1.c4, col=c("blue", "red"))
-
-plot(out1.c4 - out1, ylim=c(-3,3))
-abline(h=0, lty=2, col="gray")
-
-out1.c4i <- scanone(hyper, method="imp", addcovar=g, intcovar=g)
-
-plot(out1.c4i - out1.c4)
-
-out2 <- scantwo(hyper, method="imp")
-
-summary(out2, thr=c(6.0, 4.7, Inf, 4.7, 2.6))
-
-summary( subset(out2, chr=1) )
-
-summary( subset(out2, chr=c(7,15)) )
-
-plot(out2, chr=c(1,4,6,7,15))
-
-plot(out2, chr=1, lower="cond-add")
-plot(out2, chr=c(6,15), lower="cond-int")
-plot(out2, chr=c(7,15), lower="cond-int")
-
+###########################################################
 out2.c4 <- scantwo(hyper, method="imp", addcovar=g, chr=c(1,6,7,15))
 
 summary(out2.c4, thr=c(6.0, 4.7, Inf, 4.7, 2.6))
