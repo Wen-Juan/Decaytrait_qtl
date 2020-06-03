@@ -149,6 +149,9 @@ lod
 summary(out.hk, perms=operm.hk, alpha=0.05, pvalues=TRUE)
 ###
 chr pos  lod pval
+c12.loc8  12   8 50.4    0
+###
+chr pos  lod pval
 c12.loc5  12   5 50.3    0
 ###
 
@@ -175,6 +178,9 @@ plot(out2.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
 
 #The function max.scantwo returns the two-locus positions with the maximum LOD score for the full and additive models.
 max(out2.hk)
+###02062020
+pos1f pos2f lod.full lod.fv1 lod.int     pos1a pos2a lod.add lod.av1
+c12:c14    10     0     50.9    0.97  0.0306        10     0    50.9   0.939
 ###
 pos1f pos2f lod.full lod.fv1 lod.int     pos1a pos2a lod.add lod.av1
 c2:c12    40     5     51.3       1    0.33        40     5      51   0.672
