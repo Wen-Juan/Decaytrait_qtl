@@ -84,7 +84,7 @@ plotInfo(qtl, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), method="variance")
 #The function calc.genoprob calculates QTL genotype probabilities, conditional on the available marker data
 #The argument step indicates the step size (in cM) at which the probabilities are calculated, and determines the step size at which later LOD scores are calculated.
 qtl <- calc.genoprob(qtl, step=1, error.prob=0.001)
-
+qtl <- sim.geno(qtl, step=0.2, n.draws=100, error.prob=0.001)
 ########################################
 ########################################single-QTL genome scan
 ########################################
@@ -94,8 +94,6 @@ out.hk <- scanone(qtl, method="hk",model='binary')
 
 #We may also use the multiple imputation method of Sen and Churchill (2001). The n.draws indicates the number of imputations to perform. 
 #step indicates the step size (in cM) in which the probability is calculated.
-
-qtl <- sim.geno(qtl, step=0.2, n.draws=100, error.prob=0.001)
 out.imp <- scanone(qtl, method="imp",model='binary')
 
 #thefunctionsummary.scanonedisplaysthemaximumLODscoreon each chromosome for which the LOD exceeds a specified threshold
@@ -145,7 +143,7 @@ dev.off()
 #Thefunctionscanonemayalsobeusedtoperformapermutationtesttogetagenome-wideLODsignificancethreshold.
 operm.hk <- scanone(qtl, method="hk", n.perm=10000,pheno.col=1, model ="binary")
 operm.hk <- scantwo(qtl, method="hk", n.perm=10, pheno.col=1, model ="binary")
-operm.imp <- scanone(qtl, method="imp", n.perm=3000)
+operm.imp <- scanone(qtl, method="imp", n.perm=100)
 
 summary(operm.hk, alpha=0.05)
 summary(operm.imp, alpha=0.05)
@@ -174,44 +172,92 @@ c12.loc4  12   4 54.5    0
 ###obtaining a bootstrap-based confidence interval for the location of a qtl with the function scanoneboot.
 out.boot <- scanoneboot(qtl, chr = c(12), n.boot = 1000)
 
+
+########################################
+########################################two-QTL genome scan
+########################################
+
 # The function scantwo performs a two-dimensional genome scan with a two-QTL model. For every pair of positions, it calculates a LOD score for the full model (two QTL plus interaction) and a LOD score for the additive model (two QTL but no interaction). This be quite time consuming, and so you may wish to do the calculations on a coarser grid.
-qtl <- calc.genoprob(qtl, step=5, error.prob=0.01)
+qtl <- calc.genoprob(qtl, step=1, error.prob=0.01)
+qtl <- sim.geno(qtl, step=1, n.draws=100, error.prob=0.001)
 
-out2.hk <- scantwo(qtl, method="hk")
-
-summary(out2.hk, thresholds=c(6.0, 4.7, 4.4, 4.7, 2.6)) #backcross
-
-summary(out2.hk, thresholds=c(6.0, 4.7, Inf, 4.7, 2.6)) #intercross
+###hk model
+out2.hk <- scantwo(qtl, method="hk",model='binary')
+summary(out2.hk)
+summary(out2.hk, thresholds=c(4.90,3.83,3.61,3.87,2.34)) #backcross
+summary(out2.hk, thresholds=c(4.90,3.83,Inf,3.87,2.34)) #intercross
 
 plot(out2.hk)
+pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_hk_scantwo_lod.pdf", width=12, height=12)
 plot(out2.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
-
+dev.off()
 #The function max.scantwo returns the two-locus positions with the maximum LOD score for the full and additive models.
 max(out2.hk)
 ###02062020
-pos1f pos2f lod.full lod.fv1 lod.int     pos1a pos2a lod.add lod.av1
-c12:c14    10     0     50.9    0.97  0.0306        10     0    50.9   0.939
 ###
 pos1f pos2f lod.full lod.fv1 lod.int     pos1a pos2a lod.add lod.av1
-c2:c12    40     5     51.3       1    0.33        40     5      51   0.672
+c2:c12    43     9     40.2    1.14   0.446        44     9    39.7   0.693
 ###
-
 #One may also use scantwo to perform permutation tests in order to obtain genome-wide LOD significance thresholds.
-operm2.hk <- scantwo(qtl, method="hk", n.perm=1000)
+operm2.hk <- scantwo(qtl, method="hk", n.perm=10, model='binary')
 
-summary(operm2.hk)
+summary(operm2.hk,alpha=0.05)
 ##
 mating (1000 permutations)
 full  fv1  int  add  av1  one
 5%  4.90 3.83 3.61 3.87 1.89 2.34
 10% 4.57 3.52 3.27 3.41 1.69 2.03
+###permutation with 10
+full  fv1  int  add  av1  one
+5% 4.95 3.15 2.92 4.69 2.21 2.51
 ##
-
 summary(out2.hk, perms=operm2.hk, pvalues=TRUE,
-        alphas=c(0.05, 0.05, 0, 0.05, 0.05))
+        alphas=0.05)
 ##
 There were no pairs of loci meeting the criteria.
 ##
+plot(operm2.hk)
+
+###########
+###########
+###imp model
+out2.imp <- scantwo(qtl, method="imp",model='binary')
+summary(out2.imp)
+summary(out2.imp, thresholds=c(4.90,3.83,3.61,3.87,2.34)) #backcross
+summary(out2.imp, thresholds=c(4.90,3.83,Inf,3.87,2.34)) #intercross
+
+plot(out2.imp)
+pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_imp_scantwo_lod.pdf", width=12, height=12)
+plot(out2.imp, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16))
+dev.off()
+#The function max.scantwo returns the two-locus positions with the maximum LOD score for the full and additive models.
+max(out2.imp)
+###02062020
+###
+pos1f pos2f lod.full lod.fv1 lod.int     pos1a pos2a lod.add lod.av1
+c2:c12    43     9     40.2    1.14   0.446        44     9    39.7   0.693
+###
+#One may also use scantwo to perform permutation tests in order to obtain genome-wide LOD significance thresholds.
+operm2.hk <- scantwo(qtl, method="hk", n.perm=10, model='binary')
+
+summary(operm2.hk,alpha=0.05)
+##
+mating (1000 permutations)
+full  fv1  int  add  av1  one
+5%  4.90 3.83 3.61 3.87 1.89 2.34
+10% 4.57 3.52 3.27 3.41 1.69 2.03
+###permutation with 10
+full  fv1  int  add  av1  one
+5% 4.95 3.15 2.92 4.69 2.21 2.51
+##
+summary(out2.imp, perms=operm2.hk, pvalues=TRUE,
+        alphas=0.05)
+##
+There were no pairs of loci meeting the criteria.
+##
+plot(operm2.hk)
+
+
 ##we consider the fit of multiple-QTL models.
 chr <- c(1, 2, 4, 6, 15)
 pos <- c(50, 76, 30, 70, 20)
@@ -224,16 +270,6 @@ summary(out.fitqtl)
 ls()
 rm(list=ls())
 
-
-########################################
-########################################two-QTL genome scan
-########################################
-qtl <- calc.genoprob(qtl, step=1, error.prob=0.001)
-qtl <-sim.geno(qtl,step=11,n.draws=100,err=0.001)
-
-out2.em <- scantwo(qtl,method="em",model='binary')
-out2.hk <- scanone(qtl, method="hk",model='binary')
-out2.imp <- scanone(qtl, method="imp",model='binary')
 
 
 ############################################################
