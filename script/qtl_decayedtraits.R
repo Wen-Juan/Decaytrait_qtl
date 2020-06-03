@@ -83,7 +83,6 @@ plotInfo(qtl, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), method="variance")
 
 #The function calc.genoprob calculates QTL genotype probabilities, conditional on the available marker data
 #The argument step indicates the step size (in cM) at which the probabilities are calculated, and determines the step size at which later LOD scores are calculated.
-qtl <- calc.genoprob(qtl, step=1, error.prob=0.001)
 qtl <- sim.geno(qtl, step=0.2, n.draws=100, error.prob=0.001)
 ########################################
 ########################################single-QTL genome scan
@@ -94,6 +93,7 @@ out.hk <- scanone(qtl, method="hk",model='binary')
 
 #We may also use the multiple imputation method of Sen and Churchill (2001). The n.draws indicates the number of imputations to perform. 
 #step indicates the step size (in cM) in which the probability is calculated.
+qtl <- calc.genoprob(qtl, step=1, error.prob=0.001)
 out.imp <- scanone(qtl, method="imp",model='binary')
 
 #thefunctionsummary.scanonedisplaysthemaximumLODscoreon each chromosome for which the LOD exceeds a specified threshold
@@ -143,6 +143,7 @@ dev.off()
 #Thefunctionscanonemayalsobeusedtoperformapermutationtesttogetagenome-wideLODsignificancethreshold.
 operm.hk <- scanone(qtl, method="hk", n.perm=10000,pheno.col=1, model ="binary")
 operm.hk <- scantwo(qtl, method="hk", n.perm=10, pheno.col=1, model ="binary")
+operm.em <- scanone(qtl, method="em", n.perm=10000,pheno.col=1, model ="binary")
 operm.imp <- scanone(qtl, method="imp", n.perm=100)
 
 summary(operm.hk, alpha=0.05)
