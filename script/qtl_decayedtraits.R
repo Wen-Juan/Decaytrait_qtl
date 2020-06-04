@@ -141,7 +141,7 @@ abline(h = 3,col="blue", lwd=1, lty=2)
 dev.off()
 
 #Thefunctionscanonemayalsobeusedtoperformapermutationtesttogetagenome-wideLODsignificancethreshold.
-operm.hk <- scanone(qtl, method="hk", n.perm=10000,pheno.col=1, model ="binary")
+operm.hk <- scanone(qtl, method="hk", n.perm=90000,pheno.col=1, model ="binary")
 operm.hk <- scantwo(qtl, method="hk", n.perm=10, pheno.col=1, model ="binary")
 operm.em <- scanone(qtl, method="em", n.perm=10000,pheno.col=1, model ="binary")
 operm.imp <- scanone(qtl, method="imp", n.perm=100)
