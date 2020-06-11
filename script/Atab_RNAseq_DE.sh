@@ -19,3 +19,17 @@ Percent GC: 44.58
 /usr/local/bio/kallisto/kallisto index -i Atab_trinity.idx Atab_trinity_300bp.fa
 
 ####2.2 run kallisto to quantify the expression
+/usr/local/bio/kallisto/kallisto quant -i Atab_trinity.idx -o ./output/TCAGTT/ --single -l 350 -s 50 TCAGTT.fq -t 5
+/usr/local/bio/kallisto/kallisto quant -i Atab_trinity.idx -o ./output/AGAGAT/ --single -l 350 -s 50 AGAGAT.fq -t 5
+
+####2.3 build the matrix of transcript abundance
+/usr/local/bio/kallisto/kallisto
+/usr/local/bio/trinityrnaseq/util/R/
+
+/usr/local/bio/trinityrnaseq/util/abundance_estimates_to_matrix.pl \
+--est_method kallisto --out_prefix Atab_ \
+--gene_trans_map none \
+--name_sample_by_basedir \
+output/AGAGAT/AGAGAT.tsv \
+output/TCAGTT/TCAGTT.tsv
+
