@@ -1,4 +1,7 @@
-      ####Step1. trim the transcriptome a bit#####
+####Step1. trim the transcriptome a bit#####
+################################################
+################################################
+
 ###trim the trinity generated de novo transcriptome.
 perl remove_short_transcript.sql 300 TCAGTT_Trinity.fasta > Atab_trinity_300bp.fa
 
@@ -14,7 +17,10 @@ Percent GC: 44.58
 ###################################
 
 
-      ####Step2. Quantify accounts of transcripts#####
+####Step2. Quantify accounts of transcripts#####
+################################################
+################################################
+
 ####2.1 index the trascriptome
 /usr/local/bio/kallisto/kallisto index -i Atab_trinity.idx Atab_trinity_300bp.fa
 
