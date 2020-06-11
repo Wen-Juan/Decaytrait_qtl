@@ -1,3 +1,3 @@
 sample	sex	group
-TC	female	TC
-AG	male	AG
+"AG"	"male"	"AG"
+"TC"	"female"	"TC"
