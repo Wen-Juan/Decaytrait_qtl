@@ -1,0 +1,3 @@
+model_coefficients	AG/TC
+AG	1
+TC	-1
