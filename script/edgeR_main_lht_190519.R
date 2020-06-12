@@ -301,7 +301,7 @@ dev.off()
 ##  fit the data model ------------------------------------------
 #fitres <- glmFit(dgl, dmat) #old model fit
 #fitres <- glmQLFit(dgl, dmat, robust = TRUE)
-fitres <- glmFit(dgl, dmat, robust = TRUE, dispersion=0.4) ###command for samples without biological replicates
+fitres <- glmFit(dgl, dmat, robust = TRUE, dispersion=0.7^2) ###command for samples without biological replicates
 
 x <- read.delim(paste(datapath, sub_analyse, "_matrix.txt", sep=""), sep="\t", header=T)
 sortedX <- data.frame(x[order(x$model_coefficients, decreasing=F),])
