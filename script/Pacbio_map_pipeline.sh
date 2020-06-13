@@ -60,37 +60,30 @@ MINLEN:36 &> KG_TCAGTT_R1_trim.log
 ####mapping the filtered paired-end reads against reference genome.
 
 ###creat genome index
-/usr/local/bio/bwa.kit/bwa index MvSl-1064-A2-R4.fa
-/usr/local/bio/bwa.kit/bwa index MvSdioicae_1303_FR02_D_N206.quiver.finished.fa
+/usr/local/bio/bwa.kit/bwa index Ajap_PacBio.fa
 
 ###mapping the paired end reads
 ##############BWA mem mapping
 ###mapping the paired end reads
-/usr/local/bio/bwa.kit/bwa mem -M -t 16 MvSl-1064-A2-R4.fa LAT3D_S12_L001_R1_001_pairedR1.fastq LAT3D_S12_L001_R2_001_pairedR2.fastq > LAT3D_mappingto_MldSil1_1064a2.sam
-/usr/local/bio/bwa.kit/bwa mem -M -t 16 MvSl-1064-A2-R4.fa LAT3T_S11_L001_R1_001_pairedR1.fastq LAT3T_S11_L001_R2_001_pairedR2.fastq > LAT3T_mappingto_MldSil1_1604a2.sam
-/usr/local/bio/bwa.kit/bwa mem -M -t 16 MvSdioicae_1303_FR02_D_N206.quiver.finished.fa LAT3D_S12_L001_R1_001_pairedR1.fastq LAT3D_S12_L001_R2_001_pairedR2.fastq > LAT3D_mappingto_MsdsDI_1303D.sam
-/usr/local/bio/bwa.kit/bwa mem -M -t 16 MvSdioicae_1303_FR02_D_N206.quiver.finished.fa LAT3T_S11_L001_R1_001_pairedR1.fastq LAT3T_S11_L001_R2_001_pairedR2.fastq > LAT3T_mappingto_MsdSdi_1303D.sam 
+/usr/local/bio/bwa.kit/bwa mem -M -t 16 ../Ajap_PacBio.fa  ../AM_AGAGAT_R1_pairedR1.fastq ../AM_AGAGAT_R2_pairedR2.fastq > AM_AGAGAT_paired.sam
+
+/usr/local/bio/bwa.kit/bwa mem -M -t 16 ../Ajap_PacBio.fa  ../KG_TCAGTT_R1_pairedR1.fastq ../KG_TCAGTT_R2_pairedR2.fastq > KG_TCAGTT_paired.sam
+
 
 ####convert SAM file to BAM format
-/usr/local/bio/bwa.kit/samtools view -bS LAT3T_mappingto_MsdSdi_1303D.sam > LAT3T_mappingto_MsdSdi_1303D.bam
-/usr/local/bio/bwa.kit/samtools view -bS LAT3D_mappingto_MsdSdi_1303D.sam > LAT3D_mappingto_MsdSdi_1303D.bam
-/usr/local/bio/bwa.kit/samtools view -bS LAT3T_mappingto_MldSil1_1604a2.sam > LAT3T_mappingto_MldSil1_1604a2.bam
-/usr/local/bio/bwa.kit/samtools view -bS LAT3D_mappingto_MldSil1_1064a2.sam > LAT3D_mappingto_MldSil1_1064a2.bam
+/usr/local/bio/bwa.kit/samtools view -bS AM_AGAGAT_paired.sam > AM_AGAGAT_paired.bam
+/usr/local/bio/bwa.kit/samtools view -bS KG_TCAGTT_paired.sam > KG_TCAGTT_paired.bam
 
 ###sorting bam file
-/usr/local/bio/bwa.kit/samtools sort -o LAT3T_mappingto_MsdSdi_1303D_sorted.bam -T temporary1_sort.bam LAT3T_mappingto_MsdSdi_1303D.bam
-/usr/local/bio/bwa.kit/samtools sort -o LAT3D_mappingto_MsdSdi_1303D_sorted.bam -T temporary2_sort.bam LAT3D_mappingto_MsdSdi_1303D.bam
-/usr/local/bio/bwa.kit/samtools sort -o LAT3T_mappingto_MldSil1_1604a2_sorted.bam -T temporary3_sort.bam LAT3T_mappingto_MldSil1_1604a2.bam
-/usr/local/bio/bwa.kit/samtools sort -o LAT3D_mappingto_MldSil1_1064a2_sorted.bam -T temporary4_sort.bam LAT3D_mappingto_MldSil1_1064a2.bam
+/usr/local/bio/bwa.kit/samtools sort -o AM_AGAGAT_paired_sorted.bam -T temporary1_sort.bam AM_AGAGAT_paired.bam
+/usr/local/bio/bwa.kit/samtools sort -o KG_TCAGTT_paired_sorted.bam -T temporary2_sort.bam KG_TCAGTT_paired.bam
 
 ###index sorted bam file
-/usr/local/bio/bwa.kit/samtools index LAT3T_mappingto_MsdSdi_1303D_sorted.bam
-/usr/local/bio/bwa.kit/samtools index LAT3D_mappingto_MsdSdi_1303D_sorted.bam
-/usr/local/bio/bwa.kit/samtools index LAT3T_mappingto_MldSil1_1604a2_sorted.bam
-/usr/local/bio/bwa.kit/samtools index LAT3D_mappingto_MldSil1_1064a2_sorted.bam
+/usr/local/bio/bwa.kit/samtools index AM_AGAGAT_paired_sorted.bam
+/usr/local/bio/bwa.kit/samtools index KG_TCAGTT_paired_sorted.bam
 
 ##Count with flagstat for additional information:
-/usr/local/bio/bwa.kit/samtools flagstat LAT3T_mappingto_MsdSdi_1303D_sorted.bam > LAT3T_mappingto_MsdSdi_1303D_sorted_stats.txt
+/usr/local/bio/bwa.kit/samtools flagstat AM_AGAGAT_paired_sorted.bam > AM_AGAGAT_paired_sorted_stats.txt
 #####
 3719767 + 0 in total (QC-passed reads + QC-failed reads)
 113143 + 0 secondary
@@ -107,7 +100,7 @@ MINLEN:36 &> KG_TCAGTT_R1_trim.log
 82546 + 0 with mate mapped to a different chr (mapQ>=5)
 
 ######
-/usr/local/bio/bwa.kit/samtools flagstat LAT3D_mappingto_MsdSdi_1303D_sorted.bam >  LAT3D_mappingto_MsdSdi_1303D_sorted_stats.txt
+/usr/local/bio/bwa.kit/samtools flagstat KG_TCAGTT_paired_sorted.bam >  KG_TCAGTT_paired_sorted_stats.txt
 3597701 + 0 in total (QC-passed reads + QC-failed reads)
 77209 + 0 secondary
 0 + 0 supplementary
@@ -122,37 +115,6 @@ MINLEN:36 &> KG_TCAGTT_R1_trim.log
 84622 + 0 with mate mapped to a different chr
 52199 + 0 with mate mapped to a different chr (mapQ>=5)
 
-###
-/usr/local/bio/bwa.kit/samtools flagstat LAT3T_mappingto_MldSil1_1604a2_sorted.bam > LAT3T_mappingto_MldSil1_1604a2_sorted_stats.txt
-3763339 + 0 in total (QC-passed reads + QC-failed reads)
-156715 + 0 secondary
-0 + 0 supplementary
-0 + 0 duplicates
-3571160 + 0 mapped (94.89% : N/A)
-3606624 + 0 paired in sequencing
-1803312 + 0 read1
-1803312 + 0 read2
-3116204 + 0 properly paired (86.40% : N/A)
-3348372 + 0 with itself and mate mapped
-66073 + 0 singletons (1.83% : N/A)
-191384 + 0 with mate mapped to a different chr
-133837 + 0 with mate mapped to a different chr (mapQ>=5)
-
-###
-/usr/local/bio/bwa.kit/samtools flagstat LAT3D_mappingto_MldSil1_1064a2_sorted.bam > LAT3D_mappingto_MldSil1_1064a2_sorted_stats.txt
-3726133 + 0 in total (QC-passed reads + QC-failed reads)
-205641 + 0 secondary
-0 + 0 supplementary
-0 + 0 duplicates
-3482359 + 0 mapped (93.46% : N/A)
-3520492 + 0 paired in sequencing
-1760246 + 0 read1
-1760246 + 0 read2
-2851138 + 0 properly paired (80.99% : N/A)
-3185236 + 0 with itself and mate mapped
-91482 + 0 singletons (2.60% : N/A)
-268918 + 0 with mate mapped to a different chr
-184603 + 0 with mate mapped to a different chr (mapQ>=5)
 
 ###filtering the low quality of mapping reads
 /usr/local/bio/bwa.kit/samtools view -q 20 -b LAT3T_mappingto_MsdSdi_1303D_sorted.bam > LAT3T_mappingto_MsdSdi_1303D_sorted_q20.bam
