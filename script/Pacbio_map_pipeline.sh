@@ -85,55 +85,49 @@ MINLEN:36 &> KG_TCAGTT_R1_trim.log
 ##Count with flagstat for additional information:
 /usr/local/bio/bwa.kit/samtools flagstat AM_AGAGAT_paired_sorted.bam > AM_AGAGAT_paired_sorted_stats.txt
 #####
-3719767 + 0 in total (QC-passed reads + QC-failed reads)
-113143 + 0 secondary
+105124193 + 0 in total (QC-passed reads + QC-failed reads)
+1200895 + 0 secondary
 0 + 0 supplementary
 0 + 0 duplicates
-3530112 + 0 mapped (94.90% : N/A)
-3606624 + 0 paired in sequencing
-1803312 + 0 read1
-1803312 + 0 read2
-3180072 + 0 properly paired (88.17% : N/A)
-3368962 + 0 with itself and mate mapped
-48007 + 0 singletons (1.33% : N/A)
-164264 + 0 with mate mapped to a different chr
-82546 + 0 with mate mapped to a different chr (mapQ>=5)
+100539997 + 0 mapped (95.64% : N/A)
+103923298 + 0 paired in sequencing
+51961649 + 0 read1
+51961649 + 0 read2
+92220108 + 0 properly paired (88.74% : N/A)
+98851700 + 0 with itself and mate mapped
+487402 + 0 singletons (0.47% : N/A)
+4209608 + 0 with mate mapped to a different chr
+1849560 + 0 with mate mapped to a different chr (mapQ>=5)
 
 ######
 /usr/local/bio/bwa.kit/samtools flagstat KG_TCAGTT_paired_sorted.bam >  KG_TCAGTT_paired_sorted_stats.txt
-3597701 + 0 in total (QC-passed reads + QC-failed reads)
-77209 + 0 secondary
+103481815 + 0 in total (QC-passed reads + QC-failed reads)
+540973 + 0 secondary
 0 + 0 supplementary
 0 + 0 duplicates
-3379134 + 0 mapped (93.92% : N/A)
-3520492 + 0 paired in sequencing
-1760246 + 0 read1
-1760246 + 0 read2
-3137872 + 0 properly paired (89.13% : N/A)
-3241524 + 0 with itself and mate mapped
-60401 + 0 singletons (1.72% : N/A)
-84622 + 0 with mate mapped to a different chr
-52199 + 0 with mate mapped to a different chr (mapQ>=5)
-
-
+100247694 + 0 mapped (96.87% : N/A)
+102940842 + 0 paired in sequencing
+51470421 + 0 read1
+51470421 + 0 read2
+96357952 + 0 properly paired (93.61% : N/A)
+99369542 + 0 with itself and mate mapped
+337179 + 0 singletons (0.33% : N/A)
+2157956 + 0 with mate mapped to a different chr
+870706 + 0 with mate mapped to a different chr (mapQ>=5)
+ls 
 ###filtering the low quality of mapping reads
-/usr/local/bio/bwa.kit/samtools view -q 20 -b LAT3T_mappingto_MsdSdi_1303D_sorted.bam > LAT3T_mappingto_MsdSdi_1303D_sorted_q20.bam
-/usr/local/bio/bwa.kit/samtools view -q 20 -b LAT3D_mappingto_MsdSdi_1303D_sorted.bam > LAT3D_mappingto_MsdSdi_1303D_sorted_q20.bam
-/usr/local/bio/bwa.kit/samtools view -q 20 -b LAT3T_mappingto_MldSil1_1604a2_sorted.bam > LAT3T_mappingto_MldSil1_1604a2_sorted_q20.bam
-/usr/local/bio/bwa.kit/samtools view -q 20 -b LAT3D_mappingto_MldSil1_1064a2_sorted.bam > LAT3D_mappingto_MldSil1_1064a2_sorted_q20.bam
+/usr/local/bio/bwa.kit/samtools view -q 20 -b KG_TCAGTT_paired_sorted.bam > KG_TCAGTT_paired_sorted_q20.bam
+/usr/local/bio/bwa.kit/samtools view -q 20 -b  AM_AGAGAT_paired_sorted.bam > AM_AGAGAT_paired_sorted_q20.bam
 
 #############################################################Step 4 i######################################
 ###########################################################################################################
 ###########################################################################################################
 ####calling SNPs from BAM file
 ####Index the genome assembly (again!)
-/usr/local/bio/bwa.kit/samtools faidx MvSl-1064-A2-R4.fa
+/usr/local/bio/bwa.kit/samtools faidx Ajap_PacBio.fa
 /usr/local/bio/bwa.kit/samtools mpileup -g -f MvSl-1064-A2-R4.fa LAT3T_mappingto_MldSil1_1604a2_sorted_q20.bam > LAT3T_mappingto_MldSil1_1604a2_sorted_q20.bcf
 /usr/local/bio/bwa.kit/samtools mpileup -g -f MvSl-1064-A2-R4.fa LAT3D_mappingto_MldSil1_1064a2_sorted_q20.bam > LAT3D_mappingto_MldSil1_1064a2_sorted_q20.bcf
 
-/usr/local/bio/bwa.kit/samtools faidx MvSdioicae_1303_FR02_D_N206.quiver.finished.fa
-/usr/local/bio/bwa.kit/samtools mpileup -g -f MvSdioicae_1303_FR02_D_N206.quiver.finished.fa LAT3T_mappingto_MsdSdi_1303D_sorted_q20.bam > LAT3T_mappingto_MsdSdi_1303D_sorted_q20.bcf
-/usr/local/bio/bwa.kit/samtools mpileup -g -f MvSdioicae_1303_FR02_D_N206.quiver.finished.fa LAT3D_mappingto_MsdSdi_1303D_sorted_q20.bam > LAT3D_mappingto_MsdSdi_1303D_sorted_q20.bcf
 
 ###using bcftools
 ##(optional)first, calculate the read coverage of positions in the genome
