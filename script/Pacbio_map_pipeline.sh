@@ -125,25 +125,18 @@ ls
 ####calling SNPs from BAM file
 ####Index the genome assembly (again!)
 /usr/local/bio/bwa.kit/samtools faidx Ajap_PacBio.fa
-/usr/local/bio/bwa.kit/samtools mpileup -g -f MvSl-1064-A2-R4.fa LAT3T_mappingto_MldSil1_1604a2_sorted_q20.bam > LAT3T_mappingto_MldSil1_1604a2_sorted_q20.bcf
-/usr/local/bio/bwa.kit/samtools mpileup -g -f MvSl-1064-A2-R4.fa LAT3D_mappingto_MldSil1_1064a2_sorted_q20.bam > LAT3D_mappingto_MldSil1_1064a2_sorted_q20.bcf
-
+/usr/local/bio/bwa.kit/samtools mpileup -g -f Ajap_PacBio.fa KG_TCAGTT_paired_sorted_q20.bam > KG_TCAGTT_paired_sorted_q20.bcf
+/usr/local/bio/bwa.kit/samtools mpileup -g -f Ajap_PacBio.fa AM_AGAGAT_paired_sorted_q20.bam > AM_AGAGAT_paired_sorted_q20.bcf
 
 ###using bcftools
-##(optional)first, calculate the read coverage of positions in the genome
-bcftools mpileup -O b -o raw.bcf -f ref.fasta aligned.sorted.bam (or this step can be done using samtools as earlier step indicated to generate the raw .bcf file)
-
 ##second, Detect the single nucleotide polymorphisms (SNPs)
-bcftools call --ploidy 1 -m -v -o LAT3T_mappingto_MldSil1_1604a2_sorted_q20_variants.bcf LAT3T_mappingto_MldSil1_1604a2_sorted_q20.bcf
-bcftools call --ploidy 1 -m -v -o LAT3D_mappingto_MldSil1_1064a2_sorted_q20_variants.bcf LAT3D_mappingto_MldSil1_1064a2_sorted_q20.bcf
-bcftools call --ploidy 1 -m -v -o LAT3T_mappingto_MsdSdi_1303D_sorted_q20_variants.bcf LAT3T_mappingto_MsdSdi_1303D_sorted_q20.bcf
-bcftools call --ploidy 1 -m -v -o LAT3D_mappingto_MsdSdi_1303D_sorted_q20_variants.bcf LAT3D_mappingto_MsdSdi_1303D_sorted_q20.bcf
+bcftools call --ploidy 2 -m -v -o KG_TCAGTT_paired_sorted_q20_variants.bcf KG_TCAGTT_paired_sorted_q20.bcf
+bcftools call --ploidy 2 -m -v -o AM_AGAGAT_paired_sorted_q20_variants.bcf AM_AGAGAT_paired_sorted_q20.bcf
 
 #Filter and report the SNP variants in variant calling format (VCF)
 vcfutils.pl varFilter LAT3T_mappingto_MldSil1_1604a2_sorted_q20_variants.bcf > LAT3T_mappingto_MldSil1_1604a2_sorted_q20_variants_filtered.vcf
 vcfutils.pl varFilter LAT3D_mappingto_MldSil1_1064a2_sorted_q20_variants.bcf > LAT3D_mappingto_MldSil1_1064a2_sorted_q20_variants_filtered.vcf
-vcfutils.pl varFilter LAT3T_mappingto_MsdSdi_1303D_sorted_q20_variants.bcf > LAT3T_mappingto_MsdSdi_1303D_sorted_q20_variants_filtered.vcf
-vcfutils.pl varFilter LAT3D_mappingto_MsdSdi_1303D_sorted_q20_variants.bcf > LAT3D_mappingto_MsdSdi_1303D_sorted_q20_variants_filtered.vcf
+
 
 ###filter DP read depth 
 bcftools view -i 'INFO/DP>3 & INFO/DP<80' LAT3T_mappingto_MldSil1_1604a2_sorted_q20_variants_filtered.bcf > LAT3T_mappingto_MldSil1_1604a2_sorted_q20_variants_filtered_DP.bcf
