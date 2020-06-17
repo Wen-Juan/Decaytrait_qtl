@@ -53,7 +53,7 @@ y1 <-
   ggplot(am_35F) + 
   geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on 000035F AM") +
-  xlab("Position on MAT") +
+  xlab("Position on contig") +
   ylim(0,40) +
   xlim(0,2500000) +
   ylab("SNP density") +
@@ -69,7 +69,7 @@ y2 <-
   ggplot(kg_35F) + 
   geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on 000035F KG") +
-  xlab("Position on MAT") +
+  xlab("Position on contig") +
   ylim(0,40) +
   xlim(0,2500000) +
   ylab("SNP density") +
@@ -89,7 +89,7 @@ y3 <-
   ggplot(am_58F) + 
   geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on 000058F AM") +
-  xlab("Position on MAT") +
+  xlab("Position on contig") +
   ylim(0,40) +
   xlim(0,1780000) +
   ylab("SNP density") +
