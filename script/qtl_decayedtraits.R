@@ -9,7 +9,7 @@ url.show("http://www.rqtl.org/rqtltour.R")
 # Example 1: Hypertension
 ############################################################
 #load data
-qtl <- read.cross("csv", dir = "/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/input/", file = "genotype_linkagemap_mod.csv", alleles=c("A","B"),na.string="na")
+qtl <- read.cross("csv", dir = "/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/input/", file = "genotype_linkagemap_mod2.csv", alleles=c("A","B"),na.string="na")
 qtl <- jittermap(qtl)
 summary(qtl) 
 
