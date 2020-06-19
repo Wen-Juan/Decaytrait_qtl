@@ -2,7 +2,6 @@ library(qtl)
 
 outpath <- '/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/'
 
-operm.hk
 #operm.em
 multisim <- sim.geno(qtl, step=1, n.draws=1000, err=0.001)
 # multisim <- calc.genoprob(multisim, step=1, error.prob=0.01)
