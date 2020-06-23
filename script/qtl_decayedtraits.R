@@ -2,6 +2,12 @@
 install.packages("qtl")
 library(qtl)
 
+#also incoporate other R packages to make nice ggplot2 figures.
+library(ggplot2)
+library(ggrepel)
+library(tidyr)
+library(dplyr)
+
 ### download the Rqtl code from the tutorial.
 url.show("http://www.rqtl.org/rqtltour.R")
 
@@ -35,7 +41,7 @@ plot(qtl)
 plotMissing(qtl)
 
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/genentic_map.pdf", width=8, height=8)
-plotMap(qtl)
+plotMap(qtl,show.marker.names=FALSE,alternate.chrid=TRUE,horizontal=FALSE)
 dev.off()
 
 plotPheno(qtl, pheno.col=2)
@@ -132,19 +138,19 @@ c12.loc2  12   2 50.8
 
 #plot.scanone can plot up to three genome scans at once, provided that they conform appropriately. Alternatively, one may use the argument add.
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_em.pdf", width=8, height=8)
-plot(out.em, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue", ylim=c(0,40))
+plot(out.em, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue", ylim=c(0,40),xlab="Linkage group", ylab="LOD",lwd = 2,alternate.chrid=TRUE)
 abline(h = 3,col="blue", lwd=1, lty=2)
 dev.off()
 
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_hk.pdf", width=8, height=8)
-plot(out.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue",ylim=c(0,40))
+plot(out.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue",ylim=c(0,40),xlab="Linkage group", ylab="LOD",lwd = 2,alternate.chrid=TRUE)
 abline(h = 3,col="blue", lwd=1, lty=2)
 dev.off()
 
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_all2.pdf", width=12, height=8)
-plot(out.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),col="red",ylim=c(0,40))
-plot(out.em, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue", add=TRUE,ylim=c(0,42))
-abline(h = 3,col="blue", lwd=1, lty=2)
+plot(out.hk, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16),col="red",ylim=c(0,40),xlab="Linkage group", ylab="LOD",lwd = 2,alternate.chrid=TRUE)
+plot(out.em, chr=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16), col="blue", add=TRUE,ylim=c(0,42),xlab="Linkage group", ylab="LOD",lwd = 2,alternate.chrid=TRUE)
+abline(h = 3,col="blue", lwd=2, lty=2)
 dev.off()
 
 #Thefunctionscanonemayalsobeusedtoperformapermutationtesttogetagenome-wideLODsignificancethreshold.
@@ -233,7 +239,7 @@ library(ggplot2)
 # Create Data
 data <- data.frame(
   group=LETTERS[1:2],
-  value=c(93.75,6.25)
+  value=c(50,50)
 )
 
 # Basic piechart
@@ -283,3 +289,107 @@ ggplot(data, aes(x="", y=value, fill=group)) +
   scale_fill_manual(values=c("black", "white")) +
   theme(legend.position="none") 
 dev.off()
+
+###
+#dataManual <- data.frame(out.em)
+#qtl_plot(input=dataManual)
+qtl_plot <- function(input,              # data frame input from scanone
+                     mult.pheno = FALSE, # multiple phenotypes?
+                     model = "normal",   # model used in scanone
+                     chrs = NA,          # chromosomes to display
+                     lod = NA,           # LOD threshold
+                     rug = FALSE,        # plot marker positions as rug?
+                     ncol = NA,          # number of columns for facetting
+                     labels = NA         # optional dataframe to plot QTL labels
+) {
+  
+  # if we have multiple phenotypes and/or a 2part model, gather input
+  if (mult.pheno & model == "2part") {
+    input <- gather(input, group, lod, grep("pheno", colnames(input)))
+  } else if (mult.pheno) {
+    input <- gather(input, group, lod, grep("pheno", colnames(input)))
+  } else if (model == "2part") {
+    input <- gather(input, method, lod, lod.p.mu:lod.mu)
+  }
+  
+  # if not all chromosomes should be displayed, subset input
+  if (!is.na(chrs)[1]) {
+    input <- input[as.character(input$chr) %in% chrs, ]
+  }
+  
+  # if there is more than one LOD column, gather input
+  if (!any(colnames(input) == "lod")) {
+    input$lod <- input[, grep("lod", colnames(input))]
+  }
+  
+  # if no number of columns for facetting is defined, plot all in one row
+  if (is.na(ncol)) {
+    ncol <- length(unique(input$chr))
+  }
+  
+  # if labels are set and there is no name column, set from rownames
+  if (!is.na(labels)[1]) {
+    if (is.null(labels$name)) {
+      labels$name <- rownames(labels)
+    }
+  }
+  
+  # plot input data frame position and LOD score
+  plot <- ggplot(input, aes(x = pos, y = lod)) + {
+    
+    # if LOD threshold is given, plot as horizontal line
+    if (!is.na(lod)[1] & length(lod) == 1) geom_hline(yintercept = lod, linetype = "dashed")
+  } + {
+    
+    if (!is.na(lod)[1] & length(lod) > 1) geom_hline(data = lod, aes(yintercept = lod, linetype = group))
+  } + {
+    
+    # plot rug on bottom, if TRUE
+    if (rug) geom_rug(size = 0.1, sides = "b")
+  } + {
+    
+    # if input has column method but not group, plot line and color by method
+    if (!is.null(input$method) & is.null(input$group)) geom_line(aes(color = method), size = 2, alpha = 0.6)
+  } + {
+    
+    # if input has column group but not method, plot line and color by group
+    if (!is.null(input$group) & is.null(input$method)) geom_line(aes(color = group), size = 2, alpha = 0.6)
+  } + {
+    
+    # if input has columns method and group, plot line and color by method & linetype by group
+    if (!is.null(input$group) & !is.null(input$method)) geom_line(aes(color = method, linetype = group), size = 2, alpha = 0.6)
+  } + {
+    
+    # set linetype, if input has columns method and group
+    if (!is.null(input$group) & !is.null(input$method)) scale_linetype_manual(values = c("solid", "twodash", "dotted"))
+  } + {
+    
+    # if input has neither columns method nor group, plot black line
+    if (is.null(input$group) & is.null(input$method)) geom_line(size = 2, alpha = 0.6)
+  } + {
+    
+    # if QTL positions are given in labels df, plot as point...
+    if (!is.na(labels)[1]) geom_point(data = labels, aes(x = pos, y = lod))
+  } + {
+    
+    # ... and plot name as text with ggrepel to avoid overlapping
+    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = name), nudge_y = 0.5)
+  } + 
+    # facet by chromosome
+    facet_wrap(~ chr, ncol = ncol, scales = "free_x") +
+    # minimal plotting theme
+    theme_minimal() +
+    # increase strip title size
+    theme(strip.text = element_text(face = "bold", size = 12)) +
+    # use RcolorBrewer palette
+    scale_color_brewer(palette = "Set1") +
+    # Change plot labels
+    labs(x = "Chromosome",
+         y = "LOD",
+         color = "",
+         linetype = "")
+  
+  print(plot)
+}
+
+qtl_plot(input=out.em)
