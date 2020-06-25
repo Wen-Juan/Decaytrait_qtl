@@ -39,8 +39,8 @@ plot(qtl)
 
 #plot individual perspect of information
 plotMissing(qtl)
-
-pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/genentic_map.pdf", width=8, height=8)
+par(mfrow=c(1,1)) 
+pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/genentic_map_original.pdf", width=8, height=8)
 plotMap(qtl,show.marker.names=FALSE,alternate.chrid=TRUE,horizontal=FALSE)
 dev.off()
 
@@ -66,9 +66,16 @@ plotMissing(qtl, chr=6)
 #Re-estimate the genetic map (keeping the order of markers fixed), and plot the original map against the newly estimated one.
 newmap <- est.map(qtl, error.prob=0.001)
 plotMap(qtl, newmap)
+pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/genentic_map_originalvsnew.pdf", width=8, height=8)
+plotMap(qtl, newmap,show.marker.names=FALSE,alternate.chrid=TRUE,horizontal=FALSE)
+dev.off()
 
 #If one wished to replace the genetic map with the estimated one, it could be done as follows:
 qtl <- replace.map(qtl, newmap)
+pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/genentic_map_new.pdf", width=8, height=8)
+plotMap(qtl,show.marker.names=FALSE,alternate.chrid=TRUE,horizontal=FALSE)
+dev.off()
+
 ##error message here:Error in as.data.frame.default(x[[i]], optional = TRUE) : cannot coerce class ""A"" to a data.frame
 
 #identification of genotyping errors
