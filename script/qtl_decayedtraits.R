@@ -64,10 +64,10 @@ plotRF(qtl, chr=6)
 plotMissing(qtl, chr=6)
 
 #Re-estimate the genetic map (keeping the order of markers fixed), and plot the original map against the newly estimated one.
-newmap <- est.map(qtl, error.prob=0.001)
+newmap <- est.map(qtl, error.prob=0.001, m=0, p=0, map.function="kosambi")
 plotMap(qtl, newmap)
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/genentic_map_originalvsnew.pdf", width=8, height=8)
-plotMap(qtl, newmap,show.marker.names=FALSE,alternate.chrid=TRUE,horizontal=FALSE)
+plotMap(qtl, newmap,show.marker.names=FALSE,horizontal=FALSE,,xlab="Linkage group", ylab="Location (cM)", col = "dark green", lwd =2,cex.lab=5)
 dev.off()
 
 #If one wished to replace the genetic map with the estimated one, it could be done as follows:
