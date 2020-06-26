@@ -107,8 +107,9 @@ out.hk <- scanone(qtl, pheno.col=1, addcovar=Cross, model=c("binary"),method="hk
 #The argument step indicates the step size (in cM) at which the probabilities are calculated, and determines the step size at which later LOD scores are calculated.
 #We may also use the multiple imputation method of Sen and Churchill (2001). The n.draws indicates the number of imputations to perform. 
 #step indicates the step size (in cM) in which the probability is calculated.
-qtl <- sim.geno(qtl, step=1, n.draws=100, error.prob=0.001) 
-out.imp <- scanone(qtl, pheno.col=1, addcovar=Cross, method="imp") #as binary model is not comptatible with imp method, so decided not to use this method.
+qtl <- sim.geno(qtl, step=1, n.draws=1000, error.prob=0.001) 
+out.imp <- scanone(qtl, pheno.col=1, addcovar=Cross, model=c("binary"),method="imp") 
+#as binary model is not comptatible with imp method, so decided not to use this method.
 
 #thefunctionsummary.scanonedisplaysthemaximumLODscoreon each chromosome for which the LOD exceeds a specified threshold
 summary(out.em,pvalues=TRUE) #for some i-donot-understand reason, this values changes each time i ran the code
@@ -117,12 +118,23 @@ summary(out.em, threshold=3)
 c12.loc9  12   9 39.6
 #chr pos  lod
 c12.loc8  12   8 41.3
+##
+chr pos  lod
+c12.loc6  12   6 41.2
+##
+chr pos  lod
+c12.loc7  12   7 41.3
 
 summary(out.hk, threshold=3)
 # chr pos lod
 c12.loc10  12  10  39
 #  chr pos  lod
 c12.loc10  12  10 40.9
+###chr pos  lod
+c12.loc7  12   7 40.7
+###
+chr pos  lod
+c12.loc8  12   8 40.8
 
 summary(out.imp)
 summary(out.imp, threshold=3)
@@ -130,18 +142,36 @@ summary(out.imp, threshold=3)
 c12.loc9  12   9 39.6
 #chr pos  lod
 c12.loc2  12   2 50.8
+###
+chr pos  lod
+c12.loc6  12   6 41.2
+###
+chr pos  lod
+c12.loc7  12   7 41.3
 
 max(out.em) 
 #chr pos  lod
 c12.loc8  12   8 41.3
+#    chr pos  lod
+c12.loc6  12   6 41.2
+#  chr pos  lod
+c12.loc7  12   7 41.3
 
 max(out.hk) 
 #chr pos  lod
 c12.loc10  12  10 40.9
+## chr pos  lod
+c12.loc7  12   7 40.7
+##chr pos  lod
+c12.loc8  12   8 40.8
 
 max(out.imp) 
 # chr pos  lod
 c12.loc2  12   2 50.8
+#   chr pos  lod
+c12.loc6  12   6 41.2
+#chr pos  lod
+c12.loc7  12   7 41.3
 
 #plot.scanone can plot up to three genome scans at once, provided that they conform appropriately. Alternatively, one may use the argument add.
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_genomewide_em.pdf", width=8, height=8)
@@ -170,6 +200,13 @@ LOD thresholds (1000 permutations)
 lod
 5% 2.47
 #####
+LOD thresholds (1000 permutations)
+lod
+5% 2.4
+###
+LOD thresholds (1000 permutations)
+lod
+5% 2.36
 
 lod_threshold <- summary(operm.hk, alpha = 0.05) 
 labels_df <- as.data.frame(summary(out.hk, perms = operm.hk, alpha = 0.05, pvalues = TRUE))
@@ -182,6 +219,8 @@ summary(out.hk, perms=operm.hk, lodcolumn = 1, alpha=0.05, pvalues=TRUE) ### alp
 chr pos  lod pval
 c12.loc10  12  10 40.9    0
 ##
+chr pos  lod pval
+c12.loc8  12   8 40.8    0
 #################
 #################
 #################
@@ -191,6 +230,8 @@ summary(out.hk, perms=operm.hk, lodcolumn = 1,alpha=0.10, pvalues=TRUE)
 chr pos  lod pval
 c12.loc10  12  10 40.9    0
 ##
+chr pos  lod pval
+c12.loc8  12   8 40.8    0
 
 summary(out.hk, perms=operm.hk, lodcolumn = 1,alpha=0.60, pvalues=TRUE)
 ##Permutation = 1000
@@ -199,16 +240,24 @@ c5.loc47    5  47  1.56 0.364
 c9.loc45    9  45  1.53 0.367
 c12.loc10  12  10 40.89 0.000
 ##
+chr pos   lod  pval
+c5.loc40   5  40  1.55 0.346
+c9.loc56   9  56  1.53 0.360
+c12.loc8  12   8 40.80 0.000
 
 summary(out.em, perms=operm.em, lodcolumn = 1,alpha=0.05, pvalues=TRUE)
 ##Permutation = 1000
 chr pos  lod pval
 c12.loc8  12   8 41.3    0
+#     chr pos  lod pval
+c12.loc7  12   7 41.3    0
 
 summary(out.em, perms=operm.em, lodcolumn = 1,alpha=0.10, pvalues=TRUE)
 ##Permutation = 1000
 chr pos  lod pval
 c12.loc8  12   8 41.3    0
+# chr pos  lod pval
+c12.loc7  12   7 41.3    0
 
 summary(out.em, perms=operm.em, lodcolumn = 1,alpha=0.60, pvalues=TRUE)
 ##Permutation = 1000
@@ -216,23 +265,27 @@ chr pos   lod  pval
 c5.loc47   5  47  1.55 0.331
 c9.loc45   9  45  1.53 0.344
 c12.loc8  12   8 41.30 0.000
+# chr pos   lod  pval
+c5.loc40   5  40  1.55 0.336
+c9.loc56   9  56  1.53 0.348
+c12.loc7  12   7 41.28 0.000
 
-mname1 <- find.marker(qtl, chr = 12, pos = 10)
+mname1 <- find.marker(qtl, chr = 12, pos = 7)
 mname1 
 #[1] "Ajap26"
-
+#[1] "Ajap26"
 mname2 <- find.marker(qtl, chr = 12, pos = 8)
 mname2 
 #[1] "Ajap26"
-
+#[1] "Ajap26"
 mname3 <- find.marker(qtl, chr = 12, pos = 2)
 mname3 
 #[1] "Ajap26"
-
-mname4 <- find.marker(qtl, chr = 12, pos = 23)
+#[1] "Ajap26"
+mname4 <- find.marker(qtl, chr = 12, pos = 11)
 mname4 
 #[1] "Ajap26"
-
+#[1] "Ajap53"
 effectplot(qtl, pheno.col = 1, mname1=mname1)
 ###heterozygosity is responsible for mating success.
 
@@ -255,6 +308,12 @@ c12.loc7   12   7 40.02445
 c12.loc10  12  10 40.88967
 c12.loc13  12  13 40.03487
 #####
+chr pos      lod
+c12.loc6   12   6 40.08095
+c12.loc8   12   8 40.80095
+c12.loc11  12  11 39.90136
+####
+####
 plot(out.hk, chr=12, lodcolumn=1, main="Confidence interval for QTL at LG12", xlab="Linkage map", ylab="LOD", col = "blue", lwd =2)
 lines(x=CIchr12v1[c(1,3),2], y=c(0,0), type="l", col="blue", lwd=4)
 
@@ -265,6 +324,15 @@ c12.loc5   12   5 40.59870
 c12.loc8   12   8 41.29667
 c12.loc12  12  12 40.70013
 ###
+
+###
+chr pos      lod
+c12.loc4   12   4 40.49679
+c12.loc7   12   7 41.28363
+c12.loc10  12  10 40.69709
+
+###
+par(mfrow=c(1,1)) 
 plot(out.em, chr=12, lodcolumn=1, main="Confidence interval for QTL at LG12", xlab="Linkage map", ylab="LOD", col = "dark green", lwd =2)
 lines(x=CIchr12v2[c(1,3),2], y=c(0,0), type="l", col="dark green", lwd=4)
 
@@ -280,7 +348,7 @@ plot(out.em, chr=12, lodcolumn=1, main="Confidence interval for QTL at LG12", xl
 plot(out.hk, chr=12, lodcolumn=1, xlab="Linkage map", ylab="LOD", col = "blue", lwd =2,add=TRUE,ylim=c(0,42),lternate.chrid=TRUE,cex.lab=1.5)
 lines(x=CIchr12v2[c(1,3),2], y=c(0,0), type="l", col="dark green", lwd=4)
 lines(x=CIchr12v1[c(1,3),2], y=c(0,0), type="l", col="blue", lwd=4)
-abline(h = 2.47,col="black", lwd=1.5, lty=2)
+abline(h = 2.4,col="black", lwd=1.5, lty=2)
 dev.off()
 
 ###########
@@ -368,7 +436,7 @@ qtl_plot <- function(input,              # data frame input from scanone
   } + {
     
     # ... and plot name as text with ggrepel to avoid overlapping
-    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc10"),nudge_y = 0.7, size=4.5) 
+    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc8"),nudge_y = 0.7, size=4.5) 
   } + 
     # facet by chromosome
    facet_wrap(~ chr, ncol = ncol, scales = "free_x") +
@@ -421,7 +489,7 @@ multisim <- sim.geno(qtl, step=1, n.draws=10000, err=0.001)
 multisim2 <- calc.genoprob(multisim, step=1, error.prob=0.001)
 
 m1lg <- 12
-m1cm <- 10
+m1cm <- 7
 #m2lg <- 12
 #m2cm <- 23
 
@@ -444,16 +512,16 @@ Full model result
 ----------------------------------  
   Model formula: y ~ Cross + Q1 + Cross:Q1 
 
-df      LOD     %var Pvalue(Chi2)
-Model  3 35.90548 47.98097            0
+df     LOD     %var Pvalue(Chi2)
+Model  3 36.6254 48.65819            0
 
 
 Drop one QTL at a time ANOVA table: 
   ----------------------------------  
   df   LOD  %var Pvalue(Chi2)    
-Cross          2  0.00  0.00            1    
-12@10.0        2 35.91 47.98       <2e-16 ***
-  Cross:12@10.0  1  0.00  0.00            1    
+Cross         2  0.00  0.00            1    
+12@7.0        2 36.63 48.66       <2e-16 ***
+  Cross:12@7.0  1  0.00  0.00            1    
 ---
   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 ###
@@ -477,14 +545,14 @@ Full model result
   Model formula: y ~ Cross + Q1 + Cross:Q1 
 
 df      LOD     %var Pvalue(Chi2)
-Model  3 36.64514 48.67664            0
+Model  3 36.75003 48.77454            0
 
 
 Drop one QTL at a time ANOVA table: 
   ----------------------------------  
   df   LOD  %var Pvalue(Chi2)    
 Cross         2  0.00  0.00            1    
-12@6.0        2 36.65 48.68       <2e-16 ***
+12@6.0        2 36.75 48.77       <2e-16 ***
   Cross:12@6.0  1  0.00  0.00            1    
 ---
   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
@@ -492,8 +560,6 @@ Cross         2  0.00  0.00            1
 
 capture.output(summary(final.fit, alpha=0.05, pvalues=TRUE, format="allpheno"), file=file.path(outpath, paste("pheno",'2qtl_PVE_table.txt', sep="_")))
 
-M1
-M2
 
 ########################################
 ########################################two-QTL genome scan
