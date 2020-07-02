@@ -1,0 +1,22 @@
+fitqtl summary
+
+Method: multiple imputation 
+Model:  binary phenotype
+Number of observations : 253 
+
+Full model result
+----------------------------------  
+  Model formula: y ~ Cross + Q1 + Cross:Q1 
+
+df      LOD     %var Pvalue(Chi2)
+Model  3 36.75003 48.77454            0
+
+
+Drop one QTL at a time ANOVA table: 
+  ----------------------------------  
+  df   LOD  %var Pvalue(Chi2)    
+Cross         2  0.00  0.00            1    
+12@6.0        2 36.75 48.77       <2e-16 ***
+  Cross:12@6.0  1  0.00  0.00            1    
+---
+  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
