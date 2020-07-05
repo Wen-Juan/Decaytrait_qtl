@@ -65,6 +65,26 @@ y1 <-
   theme(axis.text.y = element_text(colour="black",size=12)) +
   theme_bw()
 
+pdf(file="/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/SNPdensity_AM35F_withcandidategene.pdf",width=10,height=10)
+grid.arrange(y1,y2, nrow = 2)
+dev.off()
+
+ggplot(am_35F) + 
+  geom_histogram(aes(x=start),binwidth=1, col= "blue") +  # pick a binwidth that is not too small 
+  ggtitle("SNPs on 000035F AM") +
+  xlab("Position on contig") +
+  ylim(0,5) +
+  xlim(1510000,1541000) +
+  ylab("SNP density") +
+  theme_bw() + 
+ # geom_vline(xintercept =1510000,colour = "yellow", size = 3,alpha=0.7) +
+#  geom_vline(xintercept =1545000,colour = "yellow", size = 3,alpha=0.7) +
+  theme(axis.title.x = element_text(size=14,colour = "black"),axis.title.y = element_text(size=14,colour = "black")) +
+  theme(axis.text.x = element_text(colour="black",size=12)) +
+  theme(axis.text.y = element_text(colour="black",size=12)) +
+  theme_bw()
+
+
 y2 <-
   ggplot(kg_35F) + 
   geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 

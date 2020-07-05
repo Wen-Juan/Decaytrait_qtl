@@ -15,7 +15,7 @@ url.show("http://www.rqtl.org/rqtltour.R")
 # Example 1: Hypertension
 ############################################################
 #load data
-qtl <- read.cross("csv", dir = "/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/input/", file = "genotype_linkagemap_mod2.csv", alleles=c("A","B"),na.string="na")
+qtl <- read.cross("csv", dir = "/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/input/", file = "genotype_linkagemap_mod3.csv", alleles=c("A","B"),na.string="na")
 qtl <- jittermap(qtl)
 summary(qtl) 
 
@@ -47,7 +47,7 @@ dev.off()
 plotPheno(qtl, pheno.col=2)
 
 #plot genetic map with marker names on certain chromosomes
-plotMap(qtl, chr=c(1, 4), show.marker.names=TRUE)
+plotMap(qtl, chr=c(7), show.marker.names=TRUE)
 
 plotMissing(qtl, reorder=TRUE)
 
