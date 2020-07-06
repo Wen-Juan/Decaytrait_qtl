@@ -199,6 +199,9 @@ summary(operm.hk, alpha=0.05)
 LOD thresholds (1000 permutations)
 lod
 5% 2.47
+LOD thresholds (1000 permutations)
+lod
+5% 2.43
 #####
 LOD thresholds (1000 permutations)
 lod
@@ -436,7 +439,7 @@ qtl_plot <- function(input,              # data frame input from scanone
   } + {
     
     # ... and plot name as text with ggrepel to avoid overlapping
-    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc8"),nudge_y = 0.7, size=4.5) 
+    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc6"),nudge_y = 0.7, size=4.5) 
   } + 
     # facet by chromosome
    facet_wrap(~ chr, ncol = ncol, scales = "free_x") +
@@ -512,15 +515,15 @@ Full model result
 ----------------------------------  
   Model formula: y ~ Cross + Q1 + Cross:Q1 
 
-df     LOD     %var Pvalue(Chi2)
-Model  3 36.6254 48.65819            0
+df      LOD     %var Pvalue(Chi2)
+Model  3 36.52724 48.56638            0
 
 
 Drop one QTL at a time ANOVA table: 
   ----------------------------------  
   df   LOD  %var Pvalue(Chi2)    
 Cross         2  0.00  0.00            1    
-12@7.0        2 36.63 48.66       <2e-16 ***
+12@7.0        2 36.53 48.57       <2e-16 ***
   Cross:12@7.0  1  0.00  0.00            1    
 ---
   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
@@ -545,14 +548,14 @@ Full model result
   Model formula: y ~ Cross + Q1 + Cross:Q1 
 
 df      LOD     %var Pvalue(Chi2)
-Model  3 36.75003 48.77454            0
+Model  3 36.72539 48.75156            0
 
 
 Drop one QTL at a time ANOVA table: 
   ----------------------------------  
   df   LOD  %var Pvalue(Chi2)    
 Cross         2  0.00  0.00            1    
-12@6.0        2 36.75 48.77       <2e-16 ***
+12@6.0        2 36.73 48.75       <2e-16 ***
   Cross:12@6.0  1  0.00  0.00            1    
 ---
   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
