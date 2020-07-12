@@ -3,3 +3,19 @@
 
 ###generate histogram file
  /usr/local/bio/jellyfish/jellyfish histo KG_km31_fastq.counts > KG_km31_fastq.counts.histo
+
+###using genomescope v2.0 was recommended to use kmer 21 for most of genomes
+###kmer 21
+http://genomescope.org/genomescope2.0/analysis.php?code=pI28nXUlI0povpWlov7F
+
+###kmer31
+http://genomescope.org/genomescope2.0/analysis.php?code=wzOxPMMnlDutfLt3D7ys
+
+###Kmer25
+http://genomescope.org/genomescope2.0/analysis.php?code=93S8LzwWZNY9CJ99L05e
+
+###kmer41
+http://genomescope.org/genomescope2.0/analysis.php?code=T52ri5URhNsSLSYn7csY
+
+###kmer21 AM population
+http://genomescope.org/genomescope2.0/analysis.php?code=ULemyk0pi0OnvGbcEFuv
