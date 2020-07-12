@@ -1,0 +1,17 @@
+transcript/281	maker-scf7180005163084-augustus-gene-0.99-mRNA-1	300	559/812 (4482)	69	5.00E-80
+transcript/4665	maker-scf7180005173889-augustus-gene-0.50-mRNA-1	203	328/470 (2633)	70	6.00E-51
+transcript/5211	maker-scf7180005166480-augustus-gene-0.44-mRNA-1	127	273/401 (2508)	68	3.00E-28
+transcript/5392	maker-scf7180005168363-augustus-gene-0.16-mRNA-1	154	269/389 (2484)	69	2.00E-36
+transcript/5815	genemark-scf7180005155074-processed-gene-0.15-mRNA-1	574	926/1321 (2411)	70	8.00E-163
+transcript/5970	snap_masked-scf7180005168363-processed-gene-0.14-mRNA-1	731	1275/1842 (2412)	69	0
+transcript/6158	genemark-scf7180005172887-processed-gene-0.1-mRNA-1	913	1051/1411 (2350)	74	0
+transcript/6378	maker-scf7180005167042-augustus-gene-0.43-mRNA-1	219	554/833 (2330)	67	7.00E-56
+transcript/7312	genemark-scf7180005172887-processed-gene-0.1-mRNA-1	913	1051/1411 (2204)	74	0
+transcript/7876	genemark-scf7180005155074-processed-gene-0.15-mRNA-1	574	926/1321 (2114)	70	7.00E-163
+transcript/8145	maker-scf7180005172354-snap-gene-0.5-mRNA-1	315	587/858 (2092)	68	1.00E-84
+transcript/11046	maker-scf7180005166480-augustus-gene-0.44-mRNA-1	127	273/401 (1752)	68	2.00E-28
+transcript/14477	maker-scf7180005163488-augustus-gene-0.19-mRNA-1	491	629/864 (1338)	73	4.00E-138
+transcript/14520	maker-scf7180005172848-augustus-gene-1.148-mRNA-1	648	663/863 (1332)	77	0
+transcript/14520	maker-scf7180005172848-snap-gene-1.199-mRNA-1	618	612/792 (1332)	77	4.00E-176
+transcript/15452	augustus_masked-scf7180005157294-processed-gene-0.13-mRNA-1	129	163/224 (1208)	73	5.00E-29
+transcript/16561	maker-scf7180005163488-augustus-gene-0.19-mRNA-1	491	629/864 (964)	73	3.00E-138
