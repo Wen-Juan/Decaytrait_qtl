@@ -67,7 +67,7 @@ plotMissing(qtl, chr=6)
 newmap <- est.map(qtl, error.prob=0.001, m=0, p=0, map.function="kosambi")
 plotMap(qtl, newmap)
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/genentic_map_originalvsnew.pdf", width=8, height=8)
-plotMap(qtl, newmap,show.marker.names=FALSE,horizontal=FALSE,,xlab="Linkage group", ylab="Location (cM)", col = "dark green", lwd =2,cex.lab=5)
+plotMap(qtl, newmap,show.marker.names=FALSE,horizontal=FALSE,xlab="Linkage group", ylab="Location (cM)", col = "dark green", lwd =2,cex.lab=5)
 dev.off()
 
 #If one wished to replace the genetic map with the estimated one, it could be done as follows:
@@ -198,18 +198,9 @@ summary(operm.hk, alpha=0.05)
 #####
 LOD thresholds (1000 permutations)
 lod
-5% 2.47
-LOD thresholds (1000 permutations)
-lod
-5% 2.43
+5% 2.51
 #####
-LOD thresholds (1000 permutations)
-lod
-5% 2.4
-###
-LOD thresholds (1000 permutations)
-lod
-5% 2.36
+
 
 lod_threshold <- summary(operm.hk, alpha = 0.05) 
 labels_df <- as.data.frame(summary(out.hk, perms = operm.hk, alpha = 0.05, pvalues = TRUE))
@@ -219,8 +210,6 @@ labels_df <- as.data.frame(summary(out.hk, perms = operm.hk, alpha = 0.05, pvalu
 #################
 summary(out.hk, perms=operm.hk, lodcolumn = 1, alpha=0.05, pvalues=TRUE) ### alpha=0.05 5% is above this threshold. 95% are below. 
 ##Permutation = 1000
-chr pos  lod pval
-c12.loc10  12  10 40.9    0
 ##
 chr pos  lod pval
 c12.loc8  12   8 40.8    0
@@ -231,43 +220,28 @@ c12.loc8  12   8 40.8    0
 summary(out.hk, perms=operm.hk, lodcolumn = 1,alpha=0.10, pvalues=TRUE)
 ##Permutation = 1000
 chr pos  lod pval
-c12.loc10  12  10 40.9    0
-##
-chr pos  lod pval
 c12.loc8  12   8 40.8    0
 
 summary(out.hk, perms=operm.hk, lodcolumn = 1,alpha=0.60, pvalues=TRUE)
 ##Permutation = 1000
 chr pos   lod  pval
-c5.loc47    5  47  1.56 0.364
-c9.loc45    9  45  1.53 0.367
-c12.loc10  12  10 40.89 0.000
-##
-chr pos   lod  pval
-c5.loc40   5  40  1.55 0.346
-c9.loc56   9  56  1.53 0.360
-c12.loc8  12   8 40.80 0.000
+c5.loc40    5  40  1.55 0.316
+c9.loc56    9  56  1.53 0.335
+c10.loc48  10  48  1.22 0.597
+c12.loc8   12   8 40.80 0.000
 
 summary(out.em, perms=operm.em, lodcolumn = 1,alpha=0.05, pvalues=TRUE)
 ##Permutation = 1000
-chr pos  lod pval
-c12.loc8  12   8 41.3    0
 #     chr pos  lod pval
 c12.loc7  12   7 41.3    0
 
 summary(out.em, perms=operm.em, lodcolumn = 1,alpha=0.10, pvalues=TRUE)
 ##Permutation = 1000
-chr pos  lod pval
-c12.loc8  12   8 41.3    0
 # chr pos  lod pval
 c12.loc7  12   7 41.3    0
 
 summary(out.em, perms=operm.em, lodcolumn = 1,alpha=0.60, pvalues=TRUE)
 ##Permutation = 1000
-chr pos   lod  pval
-c5.loc47   5  47  1.55 0.331
-c9.loc45   9  45  1.53 0.344
-c12.loc8  12   8 41.30 0.000
 # chr pos   lod  pval
 c5.loc40   5  40  1.55 0.336
 c9.loc56   9  56  1.53 0.348
@@ -276,18 +250,17 @@ c12.loc7  12   7 41.28 0.000
 mname1 <- find.marker(qtl, chr = 12, pos = 7)
 mname1 
 #[1] "Ajap26"
-#[1] "Ajap26"
+
 mname2 <- find.marker(qtl, chr = 12, pos = 8)
 mname2 
 #[1] "Ajap26"
-#[1] "Ajap26"
+
 mname3 <- find.marker(qtl, chr = 12, pos = 2)
 mname3 
 #[1] "Ajap26"
-#[1] "Ajap26"
+
 mname4 <- find.marker(qtl, chr = 12, pos = 11)
 mname4 
-#[1] "Ajap26"
 #[1] "Ajap53"
 effectplot(qtl, pheno.col = 1, mname1=mname1)
 ###heterozygosity is responsible for mating success.
@@ -307,11 +280,6 @@ dev.off()
 CIchr12v1 <- bayesint(out.hk, chr = 12, prob = 0.95)
 ####
 chr pos      lod
-c12.loc7   12   7 40.02445
-c12.loc10  12  10 40.88967
-c12.loc13  12  13 40.03487
-#####
-chr pos      lod
 c12.loc6   12   6 40.08095
 c12.loc8   12   8 40.80095
 c12.loc11  12  11 39.90136
@@ -321,12 +289,6 @@ plot(out.hk, chr=12, lodcolumn=1, main="Confidence interval for QTL at LG12", xl
 lines(x=CIchr12v1[c(1,3),2], y=c(0,0), type="l", col="blue", lwd=4)
 
 CIchr12v2 <- bayesint(out.em, chr = 12, prob = 0.95)
-###
-chr pos      lod
-c12.loc5   12   5 40.59870
-c12.loc8   12   8 41.29667
-c12.loc12  12  12 40.70013
-###
 
 ###
 chr pos      lod
@@ -351,7 +313,7 @@ plot(out.em, chr=12, lodcolumn=1, main="Confidence interval for QTL at LG12", xl
 plot(out.hk, chr=12, lodcolumn=1, xlab="Linkage map", ylab="LOD", col = "blue", lwd =2,add=TRUE,ylim=c(0,42),lternate.chrid=TRUE,cex.lab=1.5)
 lines(x=CIchr12v2[c(1,3),2], y=c(0,0), type="l", col="dark green", lwd=4)
 lines(x=CIchr12v1[c(1,3),2], y=c(0,0), type="l", col="blue", lwd=4)
-abline(h = 2.4,col="black", lwd=1.5, lty=2)
+abline(h = 2.51,col="black", lwd=1.5, lty=2)
 dev.off()
 
 ###########
