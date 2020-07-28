@@ -325,7 +325,7 @@ qtl_plot <- function(input,              # data frame input from scanone
                      mult.pheno = FALSE, # multiple phenotypes?
                      model = "binary",   # model used in scanone
                      chrs = NA,          # chromosomes to display
-                     lod = 2.47,           # LOD threshold
+                     lod = 2.51,           # LOD threshold
                      rug = FALSE,        # plot marker positions as rug?
                      ncol = NA,          # number of columns for facetting
                      labels = NA         # optional dataframe to plot QTL labels
@@ -373,7 +373,7 @@ qtl_plot <- function(input,              # data frame input from scanone
   } + {
     
     # plot rug on bottom, if TRUE
-    if (rug) geom_rug(size = 0.1, sides = "b")
+    if (rug) geom_rug(size = 0.05, sides = "b")
   } + {
     
     # if input has column method but not group, plot line and color by method
@@ -401,19 +401,20 @@ qtl_plot <- function(input,              # data frame input from scanone
   } + {
     
     # ... and plot name as text with ggrepel to avoid overlapping
-    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc6"),nudge_y = 0.7, size=4.5) 
+    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc6"),nudge_y = 0.7, size=6) 
   } + 
     # facet by chromosome
    facet_wrap(~ chr, ncol = ncol, scales = "free_x") +
-   theme(axis.title.x = element_text(size=15,colour = "black"),axis.title.y = element_text(size=15,colour = "black")) +
-   theme(axis.text.x = element_text(colour="black",size=11,angle=90)) +
-   theme(axis.text.y = element_text(colour="black",size=11)) +
+   theme(axis.title.x = element_text(size=17,colour = "black"),axis.title.y = element_text(size=17,colour = "black")) +
+   theme(axis.text.x = element_text(colour="black",size=13,angle=90)) +
+   theme(axis.text.y = element_text(colour="black",size=13)) +
     # minimal plotting theme
     #theme_minimal() +
     # increase strip title size
     theme(strip.text = element_text(face = "bold", size = 13)) +
     theme(legend.title = element_blank()) + 
-    theme(legend.position = c(0.2, 0.8)) +
+  #  theme(legend.position = 'none') +
+    theme(legend.position = c(0.1, 0.8)) +
     scale_color_manual(values=c("#009900", "#0066FF")) +
     # use RcolorBrewer palette
  #   scale_color_brewer(palette = "Set1") +
@@ -442,10 +443,8 @@ dev.off()
 pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_lg12_permutation1000_2modles.pdf", width=10, height=8)
 qtl_plot(input = rbind(data.frame(out.em, method = "EM algorithm"), 
                        data.frame(out.hk, method = "Haley-Knott regression")), 
-         lod = lod_threshold[1], 
-         chrs = c(12),
-         rug = TRUE, 
-         labels = labels_df) 
+         lod = 2.51, 
+         chrs = c(12),  rug = TRUE, labels = labels_df) 
 dev.off()
 
 ###fir the model for single QTL
