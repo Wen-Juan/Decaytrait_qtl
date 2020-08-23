@@ -1,0 +1,17 @@
+species	gene
+D. alloeum	homeobox protein Nkx-6.2 
+D. alloeum	"hormone receptor 4 (LOC107035913), mRNA"
+D. alloeum	unconventional myosin-XIX 
+D. alloeum	phospholipase D1
+D. alloeum	ubiquitin-conjugating enzyme E2 L3 
+D. alloeum	CD151 antigen 
+D. alloeum	open rectifier potassium channel protein 1 
+D. alloeum	protein lin-9 homolog 
+D. alloeum	uncharacterized LOC107035734
+F. arisanus	phospholipase D2 
+F. arisanus	DNA replication ATP-dependent helicase/nuclease DNA2 
+F. arisanus	ubiquitin-conjugating enzyme  E2 L3-like
+F. arisanus	hormone receptor 4
+F. arisanus	open rectifier potassium channel protein 1 
+M. demolitor	hormone receptor 4 
+M. demolitor	protein lin-9 homolog 
