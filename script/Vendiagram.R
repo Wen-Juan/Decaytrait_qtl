@@ -60,3 +60,57 @@ grid.arrange(gTree(children=venn.plot),ncol = 1 )
 venn_fbias_out <- arrangeGrob(gTree(children=venn.plot),ncol = 1 )
 ggsave(file="total_annotation_4species.pdf", venn_fbias_out, path = "/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/")
 
+
+##get overlap list
+shared_anno <- list(D.alloeum = as.character(Diachasma$V1), F.arisanus = as.character(Fopis$V1), M.demolitor = as.character(Microplitis$V1), A.japonica = as.character(Ajap$V1))
+
+Intersect <- function (x) {  
+  # Multiple set version of intersect
+  # x is a list
+  if (length(x) == 1) {
+    unlist(x)
+  } else if (length(x) == 2) {
+    intersect(x[[1]], x[[2]])
+  } else if (length(x) > 2){
+    intersect(x[[1]], Intersect(x[-1]))
+  }
+}
+
+Union <- function (x) {  
+  # Multiple set version of union
+  # x is a list
+  if (length(x) == 1) {
+    unlist(x)
+  } else if (length(x) == 2) {
+    union(x[[1]], x[[2]])
+  } else if (length(x) > 2) {
+    union(x[[1]], Union(x[-1]))
+  }
+}
+
+Setdiff <- function (x, y) {
+  # Remove the union of the y's from the common x's. 
+  # x and y are lists of characters.
+  xx <- Intersect(x)
+  yy <- Union(y)
+  setdiff(xx, yy)
+}
+
+combs <- 
+  unlist(lapply(1:length(shared_anno), 
+                function(j) combn(names(shared_anno), j, simplify = FALSE)),
+         recursive = FALSE)
+names(combs) <- sapply(combs, function(i) paste0(i, collapse = ""))
+str(combs)
+
+elements <- 
+  lapply(combs, function(i) Setdiff(shared_anno[i], shared_anno[setdiff(names(shared_anno), i)]))
+
+n.elements <- sapply(elements, length)
+print(n.elements)
+
+ItemsList <- venn(shared_anno, show.plot = FALSE)
+
+overlap <- calculate.overlap(list)
+
+overlap
