@@ -401,7 +401,7 @@ qtl_plot <- function(input,              # data frame input from scanone
   } + {
     
     # ... and plot name as text with ggrepel to avoid overlapping
-    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc6"),nudge_y = 0.7, size=6) 
+    if (!is.na(labels)[1]) geom_text_repel(data = labels, aes(x = pos, y = lod, label = "loc7"),nudge_y = 0.7, size=6) 
   } + 
     # facet by chromosome
    facet_wrap(~ chr, ncol = ncol, scales = "free_x") +
