@@ -1,6 +1,6 @@
 library(qtl)
 
-outpath <- '/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/'
+outpath <- '~/Decaytrait_qtl/output/'
 
 #operm.em
 multisim <- sim.geno(qtl, step=1, n.draws=10000, err=0.001)
@@ -29,32 +29,6 @@ final.fit <- fitqtl(multisim2, qtl=rqtl, formula=f1, pheno.col=1, covar=Cross, m
 summary(final.fit, alpha=0.05, pvalues=TRUE, format="allpheno")
 # the positions are fine
 ###
-fitqtl summary
-
-Method: multiple imputation 
-Model:  binary phenotype
-Number of observations : 253 
-
-Full model result
-----------------------------------  
-  Model formula: y ~ Cross + Q1 + Q2 + Cross:Q1 + Cross:Q2 + Q1:Q2 
-
-df     LOD     %var Pvalue(Chi2)
-Model  6 43.2111 54.45819            0
-
-
-Drop one QTL at a time ANOVA table: 
-  ----------------------------------  
-  df     LOD   %var Pvalue(Chi2)    
-Cross           3  3.3918  2.900      0.00136 ** 
-  12@2.0          3 14.0679 13.291     5.57e-14 ***
-  12@23.0         3  5.0578  4.392     3.51e-05 ***
-  Cross:12@2.0    1  0.1669  0.139      0.38060    
-Cross:12@23.0   1  0.3577  0.298      0.19932    
-12@2.0:12@23.0  1  0.2685  0.223      0.26613    
----
-  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-####
 
 # check interactions again, after the positions have beed refined. This allows to update both the position and the model with new interactions, in the next iteration
 qtl.auto.ai3 <- addint(multisim, qtl=rqtl, formula=f1, pheno.col=1, covar=Cross)
@@ -70,7 +44,7 @@ summary(operm.hk)
 #summary(operm.em)
 
 # plots
-pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_2qtl_lodprofile.pdf",  width=12, height=6)
+pdf("~/Decaytrait_qtl/output/qtl_lod_2qtl_lodprofile.pdf",  width=12, height=6)
 par(mfrow=c(1,2)) 
 plot(rqtl)
 plotLodProfile(rqtl)
@@ -83,7 +57,7 @@ M2 <- find.marker(qtl, m2lg, m2cm)
 # print the final model, and manually change the interaction between QTL part of the plot
 f1
 
-pdf("/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/qtl_lod_2qtl_effectplot.pdf",  width=12, height=6)
+pdf("~/Decaytrait_qtl/output/qtl_lod_2qtl_effectplot.pdf",  width=12, height=6)
 par(mfrow=c(1,2)) 
 par(mar=c(5,5,4,3))
 effectplot(multisim2, M1, main=paste("QTL 1 - LG", m1lg),  pheno.col=1)
