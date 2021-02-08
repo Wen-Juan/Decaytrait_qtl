@@ -16,19 +16,19 @@ library(tidyverse)
 
 
 #load the corresponding data files, mapping to 1064 a1 strain. 
-am_35F <- read.table('/Users/Wen-Juan/Downloads/AM_000035F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
+am_35F <- read.table('~/AM_000035F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
                                   comment.char = "#")
 str(am_35F)
 
-am_58F <- read.table('/Users/Wen-Juan/Downloads/AM_000058F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
+am_58F <- read.table('~/AM_000058F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
                      comment.char = "#")
 str(am_58F)
 
-kg_35F <- read.table('/Users/Wen-Juan/Downloads/KG_000035F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
+kg_35F <- read.table('~/KG_000035F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
                      comment.char = "#")
 str(kg_35F)
 
-kg_58F <- read.table('/Users/Wen-Juan/Downloads/KG_000058F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
+kg_58F <- read.table('~/KG_000058F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
                      comment.char = "#")
 str(kg_58F)
 
@@ -49,24 +49,8 @@ colnames(kg_58F)<-c("chr","start","id","refallele","altallele","qual",
                     "filter","info","format")
 summary(kg_58F)
 
-y1 <-
-  ggplot(am_35F) + 
-  geom_histogram(aes(x=start),binwidth=100, col= "blue") +  # pick a binwidth that is not too small 
-  ggtitle("SNPs on 000035F AM") +
-  xlab("Position on contig") +
-  ylim(0,10) +
-  xlim(1506170,1511170) +
-  ylab("SNP density") +
-  theme_bw() + 
- # geom_vline(xintercept =1510000,colour = "yellow", size = 3,alpha=0.7) +
- # geom_vline(xintercept =1545000,colour = "yellow", size = 3,alpha=0.7) +
-  theme(axis.title.x = element_text(size=14,colour = "black"),axis.title.y = element_text(size=14,colour = "black")) +
-  theme(axis.text.x = element_text(colour="black",size=12)) +
-  theme(axis.text.y = element_text(colour="black",size=12)) +
-  theme_bw()
-
 ###snps on promoter region and exon regions, 
-y <-ggplot(am_35F) + 
+ggplot(am_35F) + 
   geom_histogram(aes(x=start),binwidth=100, col= "dark grey") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on homonal receptor 4 gene") +
   xlab("Position on contig") +
@@ -93,61 +77,10 @@ y <-ggplot(am_35F) +
   theme(axis.text.y = element_text(colour="black",size=12)) +
   theme_bw()
 
-pdf(file="/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/SNPdensity_AM35F_promoter_exons.pdf",width=10,height=10)
-grid.arrange(y, nrow = 1)
+pdf(file="~/Decaytrait_qtl/output/SNPdensity_AM35F_promoter_exons.pdf",width=10,height=10)
 dev.off()
 
-y1 <-ggplot(am_35F) + 
-  geom_histogram(aes(x=start),binwidth=100, col= "dark grey") +  # pick a binwidth that is not too small 
-  ggtitle("SNPs on homonal receptor 4 gene") +
-  xlab("Position on contig") +
-  ylim(0,10) +
-  xlim(1506000,1535000) +
-  ylab("SNP density") +
-  theme_bw() + 
-#  geom_vline(xintercept =1506170,colour = "orange", size = 1,alpha=0.6) +
-#  geom_vline(xintercept =1511170,colour = "orange", size = 1,alpha=0.6) +
- # geom_vline(xintercept =1511507,colour = "green", size =1,alpha=0.6) +
-#  geom_vline(xintercept =1519632,colour = "green", size =1,alpha=0.6) +
- # geom_vline(xintercept =1522821,colour = "green", size =1,alpha=0.6) +
-  #geom_vline(xintercept =1523514,colour = "green", size =1,alpha=0.6) +
-  #geom_vline(xintercept =1523792,colour = "green", size =1,alpha=0.6) +
-  #geom_vline(xintercept =1524332,colour = "green", size = 1,alpha=0.6) +
-  #geom_vline(xintercept =1528355,colour = "green", size = 1,alpha=0.6) +
-  #geom_vline(xintercept =1529063,colour = "green", size = 1,alpha=0.6) +
-  #geom_vline(xintercept =1530801,colour = "green", size = 1,alpha=0.6) +
-  #geom_vline(xintercept =1531627,colour = "green", size = 1,alpha=0.6) +
-  #geom_vline(xintercept =1532586,colour = "green", size = 1,alpha=0.6) +
-  #geom_vline(xintercept =1533266,colour = "green", size = 1,alpha=0.6) +
-  theme(axis.title.x = element_text(size=18,colour = "black"),axis.title.y = element_text(size=18,colour = "black")) +
-  theme(axis.text.x = element_text(colour="black",size=14)) +
-  theme(axis.text.y = element_text(colour="black",size=14)) +
-  theme_bw()
-
-pdf(file="/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/SNPdensity_AM35F_promoter_exons_nocolor.pdf",width=10,height=10)
-grid.arrange(y1, nrow = 1)
-dev.off()
-
-
-ggplot(kg_35F) + 
-  geom_histogram(aes(x=start),binwidth=100, col= "blue") +  # pick a binwidth that is not too small 
-  ggtitle("SNPs on 000035F AM") +
-  xlab("Position on contig") +
-  ylim(0,10) +
-  xlim(1506170,1511170) +
-  ylab("SNP density") +
-  theme_bw() + 
-  # geom_vline(xintercept =1510000,colour = "yellow", size = 3,alpha=0.7) +
-  # geom_vline(xintercept =1545000,colour = "yellow", size = 3,alpha=0.7) +
-  theme(axis.title.x = element_text(size=14,colour = "black"),axis.title.y = element_text(size=14,colour = "black")) +
-  theme(axis.text.x = element_text(colour="black",size=12)) +
-  theme(axis.text.y = element_text(colour="black",size=12)) +
-  theme_bw()
-
-pdf(file="/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/SNPdensity_AM35F_withcandidategene.pdf",width=10,height=10)
-grid.arrange(y1,y2, nrow = 2)
-dev.off()
-
+###SNP density on contig 000035F.
 ggplot(am_35F) + 
   geom_histogram(aes(x=start),binwidth=1, col= "blue") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on 000035F AM") +
@@ -162,29 +95,11 @@ ggplot(am_35F) +
   theme(axis.text.x = element_text(colour="black",size=12)) +
   theme(axis.text.y = element_text(colour="black",size=12)) +
   theme_bw()
-
-
-y2 <-
-  ggplot(kg_35F) + 
-  geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 
-  ggtitle("SNPs on 000035F KG") +
-  xlab("Position on contig") +
-  ylim(0,40) +
-  xlim(0,2500000) +
-  ylab("SNP density") +
-  theme_bw() + 
-  geom_vline(xintercept =1510000,colour = "yellow", size = 3,alpha=0.7) +
-  geom_vline(xintercept =1545000,colour = "yellow", size = 3,alpha=0.7) +
-  theme(axis.title.x = element_text(size=14,colour = "black"),axis.title.y = element_text(size=14,colour = "black")) +
-  theme(axis.text.x = element_text(colour="black",size=12)) +
-  theme(axis.text.y = element_text(colour="black",size=12)) +
-  theme_bw()
-
-pdf(file="/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/SNPdensity_35F_withcandidategene.pdf",width=10,height=16)
-grid.arrange(y1,y2, nrow = 2)
+pdf(file="~/Decaytrait_qtl/output/SNPdensity_35F.pdf",width=10,height=16)
 dev.off()
 
-y3 <-
+
+###SNP density on contig 000058F.
   ggplot(am_58F) + 
   geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on 000058F AM") +
@@ -197,22 +112,6 @@ y3 <-
   theme(axis.text.x = element_text(colour="black",size=12)) +
   theme(axis.text.y = element_text(colour="black",size=12)) +
   theme_bw()
-
-
-y4 <-
-  ggplot(kg_58F) + 
-  geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 
-  ggtitle("SNPs on 000058F KG") +
-  xlab("Position on contig") +
-  ylim(0,40) +
-  xlim(0,1780000) +
-  ylab("SNP density") +
-  theme_bw() + 
-  theme(axis.title.x = element_text(size=14,colour = "black"),axis.title.y = element_text(size=14,colour = "black")) +
-  theme(axis.text.x = element_text(colour="black",size=12)) +
-  theme(axis.text.y = element_text(colour="black",size=12)) +
-  theme_bw()
-
-pdf(file="/Users/Wen-Juan/Dropbox (Amherst College)/Amherst_postdoc/github/Decaytrait_qtl/output/SNPdensity_58F.pdf",width=10,height=16)
-grid.arrange(y3,y4, nrow = 2)
+pdf(file="~/Decaytrait_qtl/output/SNPdensity_58F.pdf",width=10,height=16)
 dev.off()
+
