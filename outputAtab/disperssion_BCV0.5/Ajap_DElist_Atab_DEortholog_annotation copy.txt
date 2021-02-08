@@ -1,1 +1,0 @@
-A.japonica	Annotation	A.taida	sex biastranscript/5970	 protein lin-9 homolog isoform X1	TRINITY_DN2158_c0_g2_i1	femaletranscript/15045      	 CD151 antigen	TRINITY_DN6736_c0_g1_i4 	maletranscript/5392 	 nuclear pore complex protein Nup50	TRINITY_DN6360_c0_g1_i2	female

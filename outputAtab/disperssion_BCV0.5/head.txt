@@ -1,1 +1,0 @@
-gid	gname	chr	start	end	logCPM	logFC.AG.TC	PV.AG.TC	FDR.AG.TC
