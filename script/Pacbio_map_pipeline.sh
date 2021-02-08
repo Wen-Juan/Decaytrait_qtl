@@ -22,7 +22,7 @@ trimming reads to remove adapter and lower sequening score, using Trimmomatic fo
 ###using Amherst cluster, loading trimmomatic
 /usr/local/bio/triommatic/triommatic 
 
-###running the code AM reads
+###running the code for AM reads
 /usr/local/bio/triommatic/triommatic
 ADAPTERS="/usr/local/bio/triommatic/adapters/*.fa"
 
@@ -114,7 +114,8 @@ MINLEN:36 &> KG_TCAGTT_R1_trim.log
 337179 + 0 singletons (0.33% : N/A)
 2157956 + 0 with mate mapped to a different chr
 870706 + 0 with mate mapped to a different chr (mapQ>=5)
-ls 
+
+
 ###filtering the low quality of mapping reads
 /usr/local/bio/bwa.kit/samtools view -q 20 -b KG_TCAGTT_paired_sorted.bam > KG_TCAGTT_paired_sorted_q20.bam
 /usr/local/bio/bwa.kit/samtools view -q 20 -b  AM_AGAGAT_paired_sorted.bam > AM_AGAGAT_paired_sorted_q20.bam
@@ -158,38 +159,3 @@ bcftools view -i 'INFO/DP>3 & INFO/DP<80' AM_000035F_sorted_q20_variants_filtere
 bcftools view -i 'INFO/DP>3 & INFO/DP<80' AM_000058F_sorted_q20_variants_filtered.vcf > AM_000058F_sorted_q20_variants_filtered_DP.vcf
 bcftools view -i 'INFO/DP>3 & INFO/DP<80' KG_000058F_sorted_q20_variants_filtered.vcf >KG_000058F_sorted_q20_variants_filtered_DP.vcf
 bcftools view -i 'INFO/DP>3 & INFO/DP<80' KG_000035F_sorted_q20_variants_filtered.vcf > KG_000035F_sorted_q20_variants_filtered_DP.vcf
-
-####plot R figures. 
-#########################
-
-#### extract individual sample file using bcftools
-##bcftools view -s samplename,samplename file.vcf > samples_wanted.vcf
-
-#### play with VCFtools for various parameters.
-/usr/local/bio/vcftools/vcftools --SNPdensity 1000 --vcf LAT3D_S12_L001_R1R2_mappingto_MldSil1_1064_a1_final.vcf --out LAT3D_S12_L001_R1R2_mappingto_MldSil1_1064a1_snp.txt
-/usr/local/bio/vcftools/vcftools --het --vcf LAT3D_S12_L001_R1R2_mappingto_MldSil1_1064_a1_final.vcf --out LAT3D_S12_L001_R1R2_mappingto_MldSil1_1064a1_het.txt ###this part #did not work, think that is due to heterozygosity only considered to occur in diploid, not haploid, individuals. 
-
-###could use R directly plot SNP density, it works, check out the R code in /script folder.
-
-###The SNP density of MAT looks very odd.
-### selecting reads which were only properly paired /usr/local/bio/bwa.kit/samtools view -b -f 2 -F 524 LAT3T_S11_L001_R1R2_mappingto_MldSil1_1604_a1_sorted_q20.bam > LAT3T_S11_L001_R1R2_mappingto_MldSil1_1604_a1_sorted_q20_pairedonly.bam
-
-###Results still does not look very promising..
-
-### extract SNPs from only single copy gene between 1064a1 and a2 using vcftools.
-vcftools --vcf LAT3D_S12_L001_R1R2_mappingto_MldSil1_1064_a1_final.vcf --bed 1064a1_singlecopy_cds_locations.bed --out 1064a1_singlecopy_cds_locations_LAT3D_snp.vcf --recode --keep-INFO-all
-
-vcftools --vcf LAT3T_S11_L001_R1R2_mappingto_MsdSdi_1303T_variants_filtered.vcf --bed MsdSdi_1303T_singlecopy_coding_genomelocation_sorted1.bed --out 1303T_singlecopy_cds_locations_LAT3T.vcf --recode --keep-INFO-all
-
-vcftools --vcf LAT3D_S12_L001_R1R2_mappingto_MsdsDI_1303T_variants_filtered.vcf --bed MsdSdi_1303T_singlecopy_coding_genomelocation_sorted1.bed --out 1303T_singlecopy_cds_locations_LAT3D.vcf --recode --keep-INFO-all
-
-vcftools --vcf LAT3D_S12_L001_R1R2_mappingto_MldSil1_1064_a1_final.vcf --bed  MldSil1_hemi_80perc_genomeloc1.bed --out LAT3D_map1064a1_1064a1_hemilocation_snp.vcf --recode --keep-INFO-all
-
-vcftools --vcf LAT3D_S12_L001_R1R2_mappingto_MsdsDI_1303T_variants_filtered.vcf --bed  MsdSdi2_hemi_80perc_genomeloc1.bed --out LAT3D_map1303T_MsdSdi2_hemi_80perc_snp.vcf --recode --keep-INFO-all
-
-vcftools --vcf LAT3T_S11_L001_R1R2_mappingto_MldSil1_1604a1_variants_filtered.vcf --bed  MldSil1_hemi_80perc_genomeloc1.bed --out LAT3T_map1064a1_1064a1_hemi_80perc_snp.vcf --recode --keep-INFO-all
-
-vcftools --vcf LAT3T_S11_L001_R1R2_mappingto_MsdSdi_1303T_variants_filtered.vcf --bed  MsdSdi2_hemi_80perc_genomeloc1.bed --out LAT3T_map1303T_1303T_hemi_80perc_snp.vcf --recode --keep-INFO-all
-
-###convert bcf to vcf file
-bcftools view my.bcf > my.vcf
