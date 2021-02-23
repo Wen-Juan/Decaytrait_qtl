@@ -15,7 +15,7 @@ install.packages("tidyverse")
 library(tidyverse)
 
 
-#load the corresponding data files, mapping to 1064 a1 strain. 
+#load the corresponding data files, mapping to two specific contigs. 
 am_35F <- read.table('~/AM_000035F_sorted_q20_variants_filtered_DP.vcf', sep="\t",header=F,blank.lines.skip=TRUE,
                                   comment.char = "#")
 str(am_35F)
@@ -50,6 +50,7 @@ colnames(kg_58F)<-c("chr","start","id","refallele","altallele","qual",
 summary(kg_58F)
 
 ###snps on promoter region and exon regions, 
+pdf(file="~/Decaytrait_qtl/output/SNPdensity_AM35F_promoter_exons.pdf",width=10,height=10)
 ggplot(am_35F) + 
   geom_histogram(aes(x=start),binwidth=100, col= "dark grey") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on homonal receptor 4 gene") +
@@ -76,11 +77,10 @@ ggplot(am_35F) +
   theme(axis.text.x = element_text(colour="black",size=12)) +
   theme(axis.text.y = element_text(colour="black",size=12)) +
   theme_bw()
-
-pdf(file="~/Decaytrait_qtl/output/SNPdensity_AM35F_promoter_exons.pdf",width=10,height=10)
 dev.off()
 
 ###SNP density on contig 000035F.
+pdf(file="~/Decaytrait_qtl/output/SNPdensity_35F.pdf",width=10,height=16)
 ggplot(am_35F) + 
   geom_histogram(aes(x=start),binwidth=1, col= "blue") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on 000035F AM") +
@@ -95,12 +95,12 @@ ggplot(am_35F) +
   theme(axis.text.x = element_text(colour="black",size=12)) +
   theme(axis.text.y = element_text(colour="black",size=12)) +
   theme_bw()
-pdf(file="~/Decaytrait_qtl/output/SNPdensity_35F.pdf",width=10,height=16)
 dev.off()
 
 
 ###SNP density on contig 000058F.
-  ggplot(am_58F) + 
+pdf(file="~/Decaytrait_qtl/output/SNPdensity_58F.pdf",width=10,height=16)  
+ggplot(am_58F) + 
   geom_histogram(aes(x=start),binwidth=500, col= "blue") +  # pick a binwidth that is not too small 
   ggtitle("SNPs on 000058F AM") +
   xlab("Position on contig") +
@@ -112,6 +112,5 @@ dev.off()
   theme(axis.text.x = element_text(colour="black",size=12)) +
   theme(axis.text.y = element_text(colour="black",size=12)) +
   theme_bw()
-pdf(file="~/Decaytrait_qtl/output/SNPdensity_58F.pdf",width=10,height=16)
 dev.off()
 
