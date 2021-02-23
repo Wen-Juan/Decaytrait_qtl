@@ -9,7 +9,7 @@
 #Calculate the number of raw paired-end reads number.
 zcat my.fastq.gz | echo $((`wc -l`/4)) 
 
-#AM: 52250806*2=104501612, average coverage 42, using genome size 250Mb.
+#AM:52250806*2=104501612, average coverage 42, using genome size 250Mb.
 #KG:51756653*2=103513306, average coverage 42.
 
 
@@ -149,13 +149,13 @@ bcftools call -m -v -o  KG_000058F_sorted_q20_variants.bcf KG_000058F_sorted_q20
 bcftools call -m -v -o  KG_000035F_sorted_q20_variants.bcf KG_000035F_sorted_q20.bcf
 
 #Filter and report the SNP variants in variant calling format (VCF)
-vcfutils.pl varFilter  AM_000035F_sorted_q20_variants.bcf >  AM_000035F_sorted_q20_variants_filtered.vcf
+vcfutils.pl varFilter AM_000035F_sorted_q20_variants.bcf > AM_000035F_sorted_q20_variants_filtered.vcf
 vcfutils.pl varFilter AM_000058F_sorted_q20_variants.bcf > AM_000058F_sorted_q20_variants_filtered.vcf
-vcfutils.pl varFilter KG_000058F_sorted_q20_variants.bcf  > KG_000058F_sorted_q20_variants_filtered.vcf
+vcfutils.pl varFilter KG_000058F_sorted_q20_variants.bcf > KG_000058F_sorted_q20_variants_filtered.vcf
 vcfutils.pl varFilter KG_000035F_sorted_q20_variants.bcf > KG_000035F_sorted_q20_variants_filtered.vcf
 
 ###filter DP read depth 
-bcftools view -i 'INFO/DP>3 & INFO/DP<80' AM_000035F_sorted_q20_variants_filtered.vcf  >AM_000035F_sorted_q20_variants_filtered_DP.vcf
+bcftools view -i 'INFO/DP>3 & INFO/DP<80' AM_000035F_sorted_q20_variants_filtered.vcf > AM_000035F_sorted_q20_variants_filtered_DP.vcf
 bcftools view -i 'INFO/DP>3 & INFO/DP<80' AM_000058F_sorted_q20_variants_filtered.vcf > AM_000058F_sorted_q20_variants_filtered_DP.vcf
-bcftools view -i 'INFO/DP>3 & INFO/DP<80' KG_000058F_sorted_q20_variants_filtered.vcf >KG_000058F_sorted_q20_variants_filtered_DP.vcf
+bcftools view -i 'INFO/DP>3 & INFO/DP<80' KG_000058F_sorted_q20_variants_filtered.vcf > KG_000058F_sorted_q20_variants_filtered_DP.vcf
 bcftools view -i 'INFO/DP>3 & INFO/DP<80' KG_000035F_sorted_q20_variants_filtered.vcf > KG_000035F_sorted_q20_variants_filtered_DP.vcf
