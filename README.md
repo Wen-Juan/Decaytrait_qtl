@@ -1,4 +1,4 @@
-## doi: 10.5281/zenodo.4557574
+## DOI: 10.5281/zenodo.4557574
 
 # Decaytrait_qtl
 
