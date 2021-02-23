@@ -1,3 +1,5 @@
+## doi: 10.5281/zenodo.4557574
+
 # Decaytrait_qtl
 
 ##  A single QTL with large effect is associated with female functional virginity in an asexual parasitoid wasp
