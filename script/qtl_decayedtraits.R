@@ -101,17 +101,11 @@ out.imp <- scanone(qtl, pheno.col=1, addcovar=Cross, model=c("binary"),method="i
 
 #the function summary.scanone displays the maximum LOD score on each chromosome for which the LOD exceeds a specified threshold
 summary(out.em, threshold=3)
-
 summary(out.hk, threshold=3)
-
-summary(out.imp)
-summary(out.imp, threshold=3)
 
 max(out.em) 
 
 max(out.hk) 
-
-max(out.imp) 
 
 #plot.scanone can plot up to three genome scans at once, provided that they conform appropriately. Alternatively, one may use the argument add.
 pdf("~/Decaytrait_qtl/output/qtl_lod_genomewide_em.pdf", width=8, height=8)
@@ -153,12 +147,6 @@ summary(out.hk, perms=operm.hk, lodcolumn = 1, alpha=0.05, pvalues=TRUE) ### alp
 #################
 #################
 #################
-
-summary(out.hk, perms=operm.hk, lodcolumn = 1,alpha=0.10, pvalues=TRUE)
-##Permutation = 1000
-
-summary(out.hk, perms=operm.hk, lodcolumn = 1,alpha=0.60, pvalues=TRUE)
-##Permutation = 1000
 
 summary(out.em, perms=operm.em, lodcolumn = 1,alpha=0.05, pvalues=TRUE)
 ##Permutation = 1000
@@ -223,7 +211,7 @@ dev.off()
 ###########
 ###plot QTL figure.
 #dataManual <- data.frame(out.em)
-#This below qtl_plot function comes from URL:https://www.r-bloggers.com/conditional-ggplot2-geoms-in-functions-qtl-plots/
+#This below qtl_plot function has been modificed from URL:https://www.r-bloggers.com/conditional-ggplot2-geoms-in-functions-qtl-plots/
 qtl_plot <- function(input,              # data frame input from scanone
                      mult.pheno = FALSE, # multiple phenotypes?
                      model = "binary",   # model used in scanone
@@ -427,5 +415,3 @@ summary(out2.hk,thresholds=c(4.90, 3.83, 3.61, 3.87, 1.89),df=TRUE) ###5%
 
 ###########
 ###########
-# end of rqtltour.R
-
